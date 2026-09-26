@@ -11,8 +11,8 @@ sentiment_config_tuner_statistics_meta_logger.py
 from pathlib import Path
 from typing import ClassVar
 
-from config.constant.name_constants import SENTIMENT_CONFIG_TUNER_STATISTICS_META_LOGGER_NAME
-from config.constant.path_constants import SENTIMENT_CONFIG_TUNER_STATISTICS_META_JSONL_PATH
+from config.constant.common.name_constants import SENTIMENT_CONFIG_TUNER_STATISTICS_META_LOGGER_NAME
+from config.constant.local.path_constants import LOCAL_SENTIMENT_CONFIG_TUNER_STATISTICS_META_JSONL_PATH
 from process.core.postprocess.postprocessing.postprocessor.common.sentiment.log.model.logger.base_sentiment_jsonl_logger import \
     BaseSentimentJsonlLogger
 
@@ -32,4 +32,4 @@ class SentimentConfigTunerStatisticsMetaLogger(BaseSentimentJsonlLogger):
     """
 
     LOGGER_NAME: ClassVar[str] = SENTIMENT_CONFIG_TUNER_STATISTICS_META_LOGGER_NAME
-    STORAGE_PATH: ClassVar[Path] = SENTIMENT_CONFIG_TUNER_STATISTICS_META_JSONL_PATH
+    STORAGE_PATH: ClassVar[Path] = LOCAL_SENTIMENT_CONFIG_TUNER_STATISTICS_META_JSONL_PATH

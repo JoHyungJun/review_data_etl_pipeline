@@ -17,7 +17,7 @@ from __future__ import annotations
 
 from enum import Enum
 
-from config.constant.name_constants import VREVIEW_SECTION_KEY
+from config.constant.common.name_constants import VREVIEW_SECTION_KEY
 
 
 class Export(Enum):

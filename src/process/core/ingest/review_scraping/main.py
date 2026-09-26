@@ -10,10 +10,10 @@ review_scraping 의 실행부
 """
 
 
-from config.constant.name_constants import REVIEW_SCRAPING_OUTPUT_XLSX_FILE_NAME, ABLY_DIRECTORY_NAME
+from config.constant.common.name_constants import REVIEW_SCRAPING_OUTPUT_XLSX_FILE_NAME, ABLY_DIRECTORY_NAME
 from core.common.bootstrap import run_bootstrap
 from domain.platform.platform import Platform
-from factory.bootstrap.bootstrap_config import LOCAL_BOOTSTRAP_CONFIG
+from factory.bootstrap.config.local import LOCAL_BOOTSTRAP_CONFIG
 from factory.config.registry.local import build_local_config_registry
 from factory.path.local import build_local_shopping_mall_platform_data_directory_path
 from core.implementation.storage.excel.spec.excel_save_spec import ExcelSaveSpec

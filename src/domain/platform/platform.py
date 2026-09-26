@@ -15,7 +15,7 @@ platform.py
 
 from enum import Enum
 
-from config.constant.name_constants import (
+from config.constant.common.name_constants import (
     ABLY_ENG_NAME,
     ABLY_KOR_NAME,
     COUPANG_ENG_NAME,

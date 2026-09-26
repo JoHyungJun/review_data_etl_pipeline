@@ -13,7 +13,7 @@ import shutil
 from pathlib import Path
 from typing import Union, Optional, Any
 
-from config.constant.name_constants import *
+from config.constant.common.name_constants import *
 from src.util.datetime_util import get_validated_date_by_str
 
 

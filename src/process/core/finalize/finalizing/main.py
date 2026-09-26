@@ -10,7 +10,7 @@ finalizing 의 실행부
 """
 
 
-from config.constant.name_constants import POSTPROCESSING_OUTPUT_XLSX_FILE_NAME, \
+from config.constant.common.name_constants import POSTPROCESSING_OUTPUT_XLSX_FILE_NAME, \
     FINALIZING_SUCCESS_OUTPUT_XLSX_FILE_NAME, FINALIZING_FAILED_OUTPUT_XLSX_FILE_NAME, ABLY_DIRECTORY_NAME
 from core.common.bootstrap import run_bootstrap
 from core.implementation.storage.excel.spec.excel_load_spec import ExcelLoadSpec
@@ -19,7 +19,7 @@ from core.implementation.storage.excel.storage.excel_storage import ExcelStorage
 from domain.export.vreview.config.export_config import VReviewExportConfig
 from domain.export.vreview.schema.export.export_attribute_schema import VReviewExportAttributeSchema
 from domain.platform.platform import Platform
-from factory.bootstrap.bootstrap_config import LOCAL_BOOTSTRAP_CONFIG
+from factory.bootstrap.config.local import LOCAL_BOOTSTRAP_CONFIG
 from factory.config.registry.local import build_local_config_registry
 from factory.path.local import build_local_shopping_mall_platform_data_directory_path
 from factory.process.scraping.review_scraping_builder import build_ably_review_scraping_config

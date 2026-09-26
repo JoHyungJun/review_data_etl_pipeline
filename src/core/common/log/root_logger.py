@@ -15,7 +15,7 @@ from core.base.log.base_storage_logger import BaseStorageLogger
 from core.common.log.color_formatter import ColorFormatter
 from util.path_util import get_or_create_directory
 
-from config.constant.path_constants import APPLICATION_LOG_PATH
+from config.constant.local.path_constants import LOCAL_APPLICATION_LOG_PATH
 
 
 class RootLogger(BaseStorageLogger):
@@ -29,7 +29,7 @@ class RootLogger(BaseStorageLogger):
     - logging 패키지 기반 전역 로그 환경 구성
     """
 
-    STORAGE_PATH: ClassVar[Path] = APPLICATION_LOG_PATH
+    STORAGE_PATH: ClassVar[Path] = LOCAL_APPLICATION_LOG_PATH
 
     @classmethod
     def initialize(cls) -> None:
