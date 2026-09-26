@@ -1,0 +1,35 @@
+"""
+sentiment_config_tuner_statistics_meta_logger.py
+------------------------------------------------
+
+감성 추론 결과의 누적 연산 통계 데이터 및
+감성 추론 관련 로그 분석에 대한 진행 상태 및 처리 이력에 대한 메타 데이터 로깅 관련
+정보 관리 클래스 모듈
+"""
+
+
+from pathlib import Path
+from typing import ClassVar
+
+from config.constant.name_constants import SENTIMENT_CONFIG_TUNER_STATISTICS_META_LOGGER_NAME
+from config.constant.path_constants import SENTIMENT_CONFIG_TUNER_STATISTICS_META_JSONL_PATH
+from process.core.postprocess.postprocessing.postprocessor.common.sentiment.log.model.logger.base_sentiment_jsonl_logger import \
+    BaseSentimentJsonlLogger
+
+
+class SentimentConfigTunerStatisticsMetaLogger(BaseSentimentJsonlLogger):
+    """
+    감성 추론 결과의 누적 연산 통계 데이터 및
+    감성 추론 관련 로그 분석에 대한 진행 상태 및 처리 이력에 대한 메타 데이터 로깅 관련
+    정보 관리 클래스
+
+    주요 역할
+    - 감성 추론 결과 로그의 통계 및 분석 로그 경로 관련 정보 관리
+    - 감성 추론 결과 로그의 통계 및 분석 로그 작성 기능 제공
+
+    해당 클래스를 상속하는 로그 관련 클래스는 logging 기반으로 동작해야 하며,
+    initialize() 에 logging 객체 관련 초기화, 포맷터, 파일 핸들러 등의 과정이 명시되어야 함
+    """
+
+    LOGGER_NAME: ClassVar[str] = SENTIMENT_CONFIG_TUNER_STATISTICS_META_LOGGER_NAME
+    STORAGE_PATH: ClassVar[Path] = SENTIMENT_CONFIG_TUNER_STATISTICS_META_JSONL_PATH

@@ -1,0 +1,13 @@
+{
+    "max_text_length": 166,
+
+    "memory_usage_ratio": 0.7,
+
+    "oom_token_reduction_ratio": 0.7,
+
+    "min_padding_efficiency_ratio": 0.4,
+
+    "min_throughput_improvement_ratio": 1.05,
+
+    "measure_count": 3
+}
