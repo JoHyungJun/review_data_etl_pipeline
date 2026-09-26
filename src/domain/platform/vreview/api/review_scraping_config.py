@@ -45,7 +45,7 @@ class VReviewReviewScrapingConfig(BaseScrapingConfig):
             end_date: str,
             product_id: Optional[int],
             review_group_id: Optional[int],
-            output_directory_path: Union[str, Path, None] = None,
+            output_directory_path: Optional[Union[str, Path]] = None,
             max_retries: int = 3,
             delay_seconds: float = 1.0,
     ):
@@ -110,8 +110,8 @@ class VReviewReviewScrapingConfig(BaseScrapingConfig):
             start_time: Optional[str] = None,
             end_date: Optional[str] = None,
             end_time: Optional[str] = None,
-            review_group_id: Union[int, None, Literal[False]] = None,
-            product_id: Union[int, None, Literal[False]] = None,
+            review_group_id: Optional[Union[int, Literal[False]]] = None,
+            product_id: Optional[Union[int, Literal[False]]] = None,
     ) -> Dict:
         """
         API request 용 query parameters 반환

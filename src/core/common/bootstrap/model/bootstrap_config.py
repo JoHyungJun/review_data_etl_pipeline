@@ -20,3 +20,8 @@ class BootstrapConfig:
     
     # 감성 추론 관련
     sentiment_model_path: Union[Path, str]
+
+    # 로그 관련
+    application_log_path: Union[Path, str]
+    sentiment_event_log_path: Union[Path, str]
+    sentiment_config_tuner_statistics_meta_log_path: Union[Path, str]

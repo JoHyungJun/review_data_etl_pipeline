@@ -203,7 +203,7 @@ class BTreeIndex:
 
 
 def build_btree_from_excel(
-        file_path: Union[str, Path],
+        file_path: Union[Path, str],
         pk_column_name: str,
         reversed_column_map: Optional[dict] = None,
 ) -> BTreeIndex:
@@ -214,10 +214,10 @@ def build_btree_from_excel(
     - 추가 삽입되는 API response 의 json 데이터들과 포맷 및 key 명을 일치시키기 위해,
       기존 Excel 에서 바뀌어 저장된 컬럼명을 다시 API response 의 동일 key 명으로 역변환
 
-    :param file_path: Excel 경로
-    :param pk_column_name: key 로 사용할 컬럼명 (primary)
-    :param reversed_column_map: {컬럼명 : json key} 로 역변환된 dict
-    :return: 변환 및 초기화된 BTreeIndex 인스턴스
+    :param file_path: Excel 경로 Union[Path, str]
+    :param pk_column_name: key 로 사용할 컬럼명 (primary) str
+    :param reversed_column_map: {컬럼명 : json key} 로 역변환된 Optional[dict]
+    :return: 변환 및 초기화된 BTreeIndex 인스턴스 BTreeIndex
     """
 
     btree = BTreeIndex(degree=128)

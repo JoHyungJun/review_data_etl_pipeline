@@ -10,7 +10,10 @@ from datetime import datetime
 from typing import Optional, Union
 
 
-def get_validated_date_by_str(date_str: str, validate_format: str = "%Y-%m-%d") -> str:
+def get_validated_date_by_str(
+        date_str: str,
+        validate_format: str = "%Y-%m-%d"
+) -> str:
     """
     검증 대상 날짜 문자열을 파라미터 포맷 (validate_format, 기본값: "yyyy-MM-dd") 으로 검증 후 반환
 
@@ -26,7 +29,10 @@ def get_validated_date_by_str(date_str: str, validate_format: str = "%Y-%m-%d") 
         raise ValueError(f"날짜 검증 대상 변수의 포맷이 잘못되었습니다. : {date_str} ({validate_format} 형식에 맞춰주세요)")
 
 
-def get_validated_time_by_str(time_str: str, validate_format: str = "%H:%M:%S") -> str:
+def get_validated_time_by_str(
+        time_str: str,
+        validate_format: str = "%H:%M:%S"
+) -> str:
     """
     검증 대상 시간 문자열을 파라미터 포맷 (validate_format, 기본값: "HH:mm:ss") 으로 검증 후 반환
 
@@ -68,7 +74,7 @@ def get_validated_and_parsed_optional_unsigned_int(num: Optional[Union[int, str]
     변수가 None 이라면 검증 및 파싱 없이 None 반환
 
     :param num: 검증 및 파싱 대상 Optional[Union[int, str]]
-    :return: 검증 및 파싱된 양의 정수 변수값 혹은 None
+    :return: 검증 및 파싱된 양의 정수 변수값 Optional[int]
     """
 
     if num is None:

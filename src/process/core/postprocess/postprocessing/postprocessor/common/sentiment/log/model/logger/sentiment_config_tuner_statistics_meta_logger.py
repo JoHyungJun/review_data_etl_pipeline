@@ -8,11 +8,7 @@ sentiment_config_tuner_statistics_meta_logger.py
 """
 
 
-from pathlib import Path
-from typing import ClassVar
-
 from config.constant.common.name_constants import SENTIMENT_CONFIG_TUNER_STATISTICS_META_LOGGER_NAME
-from config.constant.local.path_constants import LOCAL_SENTIMENT_CONFIG_TUNER_STATISTICS_META_JSONL_PATH
 from process.core.postprocess.postprocessing.postprocessor.common.sentiment.log.model.logger.base_sentiment_jsonl_logger import \
     BaseSentimentJsonlLogger
 
@@ -31,5 +27,4 @@ class SentimentConfigTunerStatisticsMetaLogger(BaseSentimentJsonlLogger):
     initialize() 에 logging 객체 관련 초기화, 포맷터, 파일 핸들러 등의 과정이 명시되어야 함
     """
 
-    LOGGER_NAME: ClassVar[str] = SENTIMENT_CONFIG_TUNER_STATISTICS_META_LOGGER_NAME
-    STORAGE_PATH: ClassVar[Path] = LOCAL_SENTIMENT_CONFIG_TUNER_STATISTICS_META_JSONL_PATH
+    LOGGER_NAME = SENTIMENT_CONFIG_TUNER_STATISTICS_META_LOGGER_NAME

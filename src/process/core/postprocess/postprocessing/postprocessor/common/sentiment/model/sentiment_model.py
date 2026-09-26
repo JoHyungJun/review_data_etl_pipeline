@@ -67,7 +67,7 @@ class SentimentModel:
     @classmethod
     def initialize_sentiment_model(
             cls,
-            model_path: Union[str, Path],
+            model_path: Union[Path, str],
             sentiment_config: SentimentConfig,
     ) -> None:
         """
@@ -76,7 +76,7 @@ class SentimentModel:
         해당 클래스는 @classmethod 를 통해 static 하게 사용되기 때문에,
         애플리케이션의 실행 시점 setup 단계에서 해당 메서드를 호출하여 초기화해야 함
 
-        :param model_path: 감성 추론 모델이 위치하는 디렉토리 경로 Union[str, Path]
+        :param model_path: 감성 추론 모델이 위치하는 디렉토리 경로 Union[Path, str]
         :param sentiment_config: 감성 추론 모델 설정값 관리 클래스 SentimentConfig
         :return: 없음
         """

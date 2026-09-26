@@ -15,8 +15,8 @@ from util.logging_util import logging_error_event
 
 
 def initialize_config_schema(
-        schema_yaml_path: Union[str, Path],
-        schema_constants_py_path: Union[str, Path]
+        schema_yaml_path: Union[Path, str],
+        schema_constants_py_path: Union[Path, str],
 ) -> None:
     """
     애플리케이션 프로세스 실행에 요구되는 설정값 스키마 관련
@@ -26,8 +26,8 @@ def initialize_config_schema(
     - 스키마 load 및 싱글톤 인스턴스 초기화
     - 스키마 정보를 yaml 파일에 반영
 
-    :param schema_yaml_path: 스키마 산출 후 YAML save 경로 Union[str, Path]
-    :param schema_constants_py_path: 스키마 산출 후 상수 모듈 save 경로 Union[str, Path]
+    :param schema_yaml_path: 스키마 산출 후 YAML save 경로 Union[Path, str]
+    :param schema_constants_py_path: 스키마 산출 후 상수 모듈 save 경로 Union[Path, str]
     :return: 없음
     """
 

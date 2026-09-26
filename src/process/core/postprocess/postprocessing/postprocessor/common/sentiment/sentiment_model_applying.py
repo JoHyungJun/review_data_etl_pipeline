@@ -15,7 +15,7 @@ post processing 중 한 단계의 모듈 (Optional)
 import logging
 import time
 from collections import deque, Counter
-from typing import Union, Optional
+from typing import Optional
 
 import pandas as pd
 import torch
@@ -25,12 +25,14 @@ from process.core.postprocess.postprocessing.postprocessor.common.sentiment.cons
     SENTIMENT_POSITIVE_LABEL,
     SENTIMENT_NEGATIVE_LABEL,
 )
+from process.core.postprocess.postprocessing.postprocessor.common.sentiment.log.model.logger.sentiment_event_logger import \
+    SentimentEventLogger
 from process.core.postprocess.postprocessing.postprocessor.common.sentiment.log.model.models import (
     SentimentInferredLog,
     SentimentOOMFallbackLog,
     SentimentInferredFailedLog,
 )
-from process.core.postprocess.postprocessing.postprocessor.common.sentiment.log.model.logger.sentiment_inferred_logger import SentimentEventLogger
+
 from process.core.postprocess.postprocessing.postprocessor.common.sentiment.model.batch_snapshot import BatchSnapshot, \
     TextTokenLengthMapping, BatchSnapshotSummary
 from process.core.postprocess.postprocessing.postprocessor.common.sentiment.model.sentiment_model import SentimentModel

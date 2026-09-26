@@ -224,7 +224,7 @@ def _calculate_adaptive_ema_alpha(
     :return 분석 및 결과 적용된 ema alpha 값 float
     """
 
-    # 검증
+    # validate
     if len(statistics_history) <= min_threshold:
         return previous_ema_alpha
 

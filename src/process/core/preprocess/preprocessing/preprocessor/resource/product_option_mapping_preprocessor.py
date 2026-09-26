@@ -24,7 +24,7 @@ def export_product_id_to_product_option_mapping_preprocessing(
         product_option_mapping_df: pd.DataFrame,
         source_attribute_schema: Type[BaseProductOptionMappingAttributeSchema],
         target_attribute_schema: Optional[Type[BaseAttributeSchema]] = None,
-        file_path: Union[str, Path] = None,
+        file_path: Optional[Union[Path, str]] = None,
 ) -> pd.DataFrame:
     """
     export 상품 id 와 상품 정보 매핑 정보 데이터 전처리 및 DataFrame 반환
@@ -35,8 +35,8 @@ def export_product_id_to_product_option_mapping_preprocessing(
 
     :param product_option_mapping_df: {export 플랫폼별 상품 id - 상품 정보} 매핑 데이터 pandas.DataFrame
     :param source_attribute_schema: 상품 정보 매핑 데이터의 컬럼명 정보를 담은 BaseNameMappingAttributeSchema
-    :param target_attribute_schema: 매핑할 컬럼명 정보를 담은 BaseAttributeSchema (Optional)
-    :param file_path: 로그를 위한 파일 경로 (Optional)
+    :param target_attribute_schema: 매핑할 컬럼명 정보를 담은 Optional[BaseAttributeSchema]
+    :param file_path: 로그를 위한 파일 경로 Optional[Union[Path, str]]
     :return: 전처리된 상품명 매핑 데이터 pandas.DataFrame
     """
 

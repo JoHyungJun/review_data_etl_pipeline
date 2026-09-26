@@ -29,13 +29,17 @@ MONTH_MILLISECONDS = 30 * DAY_MILLISECONDS
 YEAR_MILLISECONDS = 365 * DAY_MILLISECONDS
 
 
-def join_date_and_time(date_str: str, time_str: str, delimiter: str = " ") -> str:
+def join_date_and_time(
+        date_str: str,
+        time_str: str,
+        delimiter: str = " "
+) -> str:
     """
     파라미터 날짜/시간 검증 및 구분자 포함 통합 단일 문자열 반환
 
-    :param date_str: 날짜 str (yyyy-MM-dd)
-    :param time_str: 시간 str (HH:mm:ss)
-    :param delimiter: 날짜 시간 정보의 구분자
+    :param date_str: 날짜 (yyyy-MM-dd) str
+    :param time_str: 시간 (HH:mm:ss) str
+    :param delimiter: 날짜 시간 정보의 구분자 str
     :return: 날짜/구분자/시간 통합 str
     """
 
@@ -44,13 +48,17 @@ def join_date_and_time(date_str: str, time_str: str, delimiter: str = " ") -> st
     return f"{date_str}{delimiter}{time_str}"
 
 
-def encode_date_and_time(date_str: str, time_str: str, delimiter: str = " ") -> str:
+def encode_date_and_time(
+        date_str: str,
+        time_str: str,
+        delimiter: str = " "
+) -> str:
     """
     파라미터 날짜/시간 검증 및 구분자 포함 URL 인코딩된 단일 문자열 반환
 
-    :param date_str: 날짜 str (yyyy-MM-dd)
-    :param time_str: 시간 str (HH:mm:ss)
-    :param delimiter: 날짜 시간 정보의 구분자
+    :param date_str: 날짜 (yyyy-MM-dd) str
+    :param time_str: 시간 (HH:mm:ss) str
+    :param delimiter: 날짜 시간 정보의 구분자 str
     :return: 날짜/구분자/시간 통합 및 인코딩된 str
     """
 
@@ -67,7 +75,7 @@ def parse_date_by_str(
     str 형식의 날짜 정보를 datetime.date 객체로 변환
 
     :param date_str: 날짜 str
-    :param parse_format: 변환 포맷 (기본값: %Y-%m-%d)
+    :param parse_format: 변환 포맷 (기본값: %Y-%m-%d) str
     :return: 검증 및 변환 성공 여부에 따른 Optional[datetime.date]
     """
 
@@ -89,7 +97,7 @@ def parse_time_by_str(
     str 형식의 시간 정보를 datetime.time 객체로 변환
 
     :param time_str: 시간 str
-    :param parse_format: 변환 포맷 (기본값: %H:%M:%S)
+    :param parse_format: 변환 포맷 (기본값: %H:%M:%S) Optional[str]
     :return: 검증 및 변환 성공 여부에 따른 Optional[datetime.time]
     """
 
@@ -103,12 +111,15 @@ def parse_time_by_str(
     return datetime.strptime(time_str, parse_format).time()
 
 
-def adjust_term_to_safe_limit_ms(term_limit_ms: Optional[int], ratio: float = 0.8) -> Optional[int]:
+def adjust_term_to_safe_limit_ms(
+        term_limit_ms: Optional[int],
+        ratio: float = 0.8
+) -> Optional[int]:
     """
     플랫폼별 API 수집 term 에 안전 비율을 적용하여 반환
 
-    :param term_limit_ms: 플랫폼 term (milliseconds 단위)
-    :param ratio: 안전 비율 (기본값: 80%)
+    :param term_limit_ms: 플랫폼 term (milliseconds 단위) Optional[int]
+    :param ratio: 안전 비율 (기본값: 80%) float
     :return: 검증 성공 여부에 따른 Optional[int]
     """
 
@@ -124,8 +135,8 @@ def safe_parse_timestamp(timestamp: Any) -> Optional[pd.Timestamp]:
     """
     다양한 자료형 (int/float/str/NaN) 의 일시 정보를 pandas.Timestamp 로 변환 후 반환
 
-    :param timestamp: 변환 대상 timestamp
-    :return: 분기 및 변환된 pandas.Timestamp
+    :param timestamp: 변환 대상 timestamp Any
+    :return: 분기 및 변환된 Optional[pandas.Timestamp]
     """
 
     try:

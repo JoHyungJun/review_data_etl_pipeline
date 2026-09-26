@@ -23,7 +23,7 @@ def order_history_preprocessing(
         order_history_df: pd.DataFrame,
         source_attribute_schema: Type[BaseOrderHistoryAttributeSchema],
         target_attribute_schema: Optional[Type[BaseAttributeSchema]] = None,
-        file_path: Union[str, Path] = None,
+        file_path: Optional[Union[Path, str]] = None,
 ) -> pd.DataFrame:
     """
     수집된 주문 내역 데이터 전처리 및 DataFrame 반환
@@ -37,7 +37,7 @@ def order_history_preprocessing(
     :param order_history_df: 주문 내역 데이터 pandas.DataFrame
     :param source_attribute_schema: 주문 내역 데이터의 컬럼명 정보를 담은 BaseReviewAttributeSchema
     :param target_attribute_schema: 매핑할 컬럼명 정보를 담은 BaseAttributeSchema (Optional)
-    :param file_path: 로그를 위한 파일 경로 (Optional)
+    :param file_path: 로그를 위한 파일 경로 Optional[Union[Path, str]]
     :return: 전처리된 주문 내역 데이터 pandas.DataFrame
     """
 

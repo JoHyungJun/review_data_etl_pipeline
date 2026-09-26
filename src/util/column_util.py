@@ -8,7 +8,7 @@ column_util.py
 
 import json
 import logging
-from typing import Any, Union
+from typing import Any, Union, Optional
 
 import pandas as pd
 
@@ -17,7 +17,7 @@ def date_to_str(date: Any) -> str:
     """
     날짜 데이터를 문자열 포맷 (yyyy-MM-dd) 으로 변환
 
-    :param date: 개별 날짜 데이터
+    :param date: 개별 날짜 데이터 Any
     :return: 변환된 날짜 str
     """
 
@@ -34,7 +34,7 @@ def time_to_str(time: Any) -> str:
     시간 데이터를 문자열 포맷 (HH:mm:ss) 으로 변환
     파라미터가 가질 수 있는 여러 문자형에 대해 Excel save 환경 및 여러 환경을 고려한 분기로 변환
 
-    :param time: 개별 시간 데이터
+    :param time: 개별 시간 데이터 Any
     :return: 변환된 시간 str
     """
 
@@ -69,7 +69,11 @@ def time_to_str(time: Any) -> str:
         )
 
 
-def combine_title_content(row, title_column_name: str, contents_column_name: str):
+def combine_title_content(
+        row: pd.Series,
+        title_column_name: str,
+        contents_column_name: str
+) -> Optional[str]:
     """
     데이터 개별 행 (레코드) 을 파라미터로 받아 리뷰 내용과 제목을 규칙에 의해 결합하고 반환
 
@@ -81,10 +85,10 @@ def combine_title_content(row, title_column_name: str, contents_column_name: str
         -> "{제목} {내용}" 둘 다 반환
         -> 단, 제목이 내용의 시작 부와 완전히 겹친다면 내용만 반환
 
-    :param row: 데이터 개별 행 (레코드)
-    :param title_column_name: 제목 컬럼명
-    :param contents_column_name: 내용 컬럼명
-    :return: 제목, 내용을 규칙에 따라 결합한 str
+    :param row: 데이터 개별 행 (레코드) pandas.Series
+    :param title_column_name: 제목 컬럼명 str
+    :param contents_column_name: 내용 컬럼명 str
+    :return: 제목, 내용을 규칙에 따라 결합한 Optional[str]
     """
 
     title = row.get(title_column_name)
@@ -119,7 +123,7 @@ def get_valid_columns_in_df(
     - df 의 컬럼명에 존재하지 않는 컬럼명 제외
 
     :param df: 대상 pandas.DataFrame
-    :param column_names: 검증 대상 컬럼 목록
+    :param column_names: 검증 대상 컬럼 목록 list[str]
     :return: 정상적 값이면서 df 에 존재하는 컬럼 list[str]
     """
 
@@ -147,7 +151,7 @@ def drop_safely(
     별도의 에러 혹은 로그 처리 없이 무시
 
     :param df: 대상 pandas.DataFrame
-    :param column_names: 삭제할 컬럼 목록
+    :param column_names: 삭제할 컬럼 목록 list[str]
     :param inplace: 기존 df 에 해당 메서드 로직 이후의 결과를 덮어 쓸지 여부 bool
     :return: 지정 컬럼 삭제 후의 데이터 pandas.DataFrame
     """
@@ -180,7 +184,7 @@ def drop_invalid_columns_data_safely(
     - None/NaN/Null 데이터 삭제
 
     :param df: 대상 pandas.DataFrame
-    :param column_names: 지정할 대상 컬럼 목록
+    :param column_names: 지정할 대상 컬럼 목록 list[str]
     :param inplace: 기존 df 에 해당 메서드 로직 이후의 결과를 덮어 쓸지 여부 bool
     :return: 지정 컬럼 전처리 후의 데이터 pandas.DataFrame
     """
@@ -583,10 +587,10 @@ def build_indexed_column_name(
     """
     공통 인덱스 컬럼 규칙 정의 및 반환
 
-    :param column_name: 인덱스를 적용할 컬럼명
-    :param index: 인덱스 번호
-    :param delimiter: 인덱스와 컬럼명 사이에 들어갈 구분자
-    :return: 공통 인덱스 컬럼 규칙을 적용한 컬럼명
+    :param column_name: 인덱스를 적용할 컬럼명 str
+    :param index: 인덱스 번호 int
+    :param delimiter: 인덱스와 컬럼명 사이에 들어갈 구분자 str
+    :return: 공통 인덱스 컬럼 규칙을 적용한 컬럼명 str
     """
 
     return f"{column_name}{delimiter}{index}"

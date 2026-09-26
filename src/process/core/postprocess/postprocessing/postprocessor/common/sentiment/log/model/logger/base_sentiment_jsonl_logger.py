@@ -8,7 +8,8 @@ base_sentiment_jsonl_logger.py
 
 import json
 import logging
-from typing import Optional
+from pathlib import Path
+from typing import Optional, Union
 
 from core.base.log.base_storage_logger import BaseStorageLogger
 from process.core.postprocess.postprocessing.postprocessor.common.sentiment.log.model.models import BaseSentimentLog
@@ -28,30 +29,30 @@ class BaseSentimentJsonlLogger(BaseStorageLogger):
     initialize() 에 logging 객체 관련 초기화, 포맷터, 파일 핸들러 등의 과정이 명시되어야 함
 
     주의 사항
-    - 클래스 내부에서 관리되는 logger name, log path 정보는 initialize() 내부, 혹은 클래스 선언 시점에서의 초기화를 강제
-    - logger name 정보에 대한 정의는 Optional, storage path 정보에 대한 정의는 Required
-      (단, 기본적으로 정의된 default initialize() 의 경우 logger name 이 Required)
+    - 클래스 내부에서 관리되는 LOGGER_NAME 은 클래스 선언 시점에 강제,
+      STORAGE_PATH 정보는 initialize() 시점에서의 초기화를 강제
     """
 
     @classmethod
-    def initialize(cls) -> None:
+    def initialize(
+            cls,
+            storage_path: Union[Path, str],
+    ) -> None:
         """
         클래스 내부에서 관리하는 변수 및 logging 객체에 대한 초기화 및 설정
 
-        주의 사항
-        - 해당 메서드는 클래스 내부 관리 변수인 logger name 을 이용한 default 템플릿 형태의 로직이므로,
-          logger name 없이 자체적인 커스텀 logging 객체를 만들어 관리하고 싶은 클래스의 경우
-          해당 메서드의 오버라이딩으로 logging 객체 초기화를 권고
-
+        :param storage_path: 로그 파일을 저장할 경로 Union[Path, str]
         :return: 없음
         """
 
-        # 검증
-        if cls.LOGGER_NAME is None or cls.STORAGE_PATH is None:
+        # validate
+        if cls.LOGGER_NAME is None:
             raise ValueError(
                 f"{cls.__name__} 클래스의 내부에서 관리하는 필수 변수에 대한 초기화 및 설정이 이루어지지 않았습니다. "
                 "코드를 확인해주세요."
             )
+
+        cls.STORAGE_PATH = Path(storage_path)
 
         logger = logging.getLogger(cls.LOGGER_NAME)
 
@@ -60,11 +61,12 @@ class BaseSentimentJsonlLogger(BaseStorageLogger):
             return
 
         # root logger 객체와 분리 및 설정 (별도의 logging 객체로, root logger 에게 이벤트 (로그) 를 전파하지 않음)
-        logger = logging.getLogger(cls.LOGGER_NAME)
         logger.setLevel(logging.INFO)
         logger.propagate = False
 
-        get_or_create_directory(full_path=cls.STORAGE_PATH.parent)
+        get_or_create_directory(
+            full_path=cls.STORAGE_PATH.parent
+        )
 
         # JSONL 파일 핸들러
         file_handler = logging.FileHandler(
@@ -92,7 +94,7 @@ class BaseSentimentJsonlLogger(BaseStorageLogger):
         :param sentiment_log_model: 감성 추론 로깅에서 사용되는 이벤트 성격 단위 데이터 객체 BaseSentimentLog
         """
 
-        cls._ensure_initialized()
+        cls._validate_initialized()
 
         try:
             cls.get_logger().info(
@@ -141,7 +143,7 @@ class BaseSentimentJsonlLogger(BaseStorageLogger):
             ]
         """
 
-        cls._ensure_initialized()
+        cls._validate_initialized()
 
         if not cls.STORAGE_PATH.exists():
             logging_file_event(
@@ -182,6 +184,7 @@ class BaseSentimentJsonlLogger(BaseStorageLogger):
                         current_cursor_byte = end_of_line_byte
                     except json.JSONDecodeError:
                         has_invalid_line = True
+                        continue
 
                     logs.append(BaseSentimentLog.from_dict(log_dict))
 
@@ -220,7 +223,6 @@ class BaseSentimentJsonlLogger(BaseStorageLogger):
             ]
         """
 
-        cls._ensure_initialized()
         return cls.read_logs_between_bytes()
 
 
@@ -237,7 +239,7 @@ class BaseSentimentJsonlLogger(BaseStorageLogger):
         :return: 없음
         """
 
-        cls._ensure_initialized()
+        cls._validate_initialized()
 
         try:
             with open(cls.STORAGE_PATH, "w", encoding="utf-8"):

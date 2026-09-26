@@ -9,13 +9,11 @@ root_logger.py
 import logging
 import sys
 from pathlib import Path
-from typing import ClassVar
+from typing import Union, Optional
 
 from core.base.log.base_storage_logger import BaseStorageLogger
 from core.common.log.color_formatter import ColorFormatter
 from util.path_util import get_or_create_directory
-
-from config.constant.local.path_constants import LOCAL_APPLICATION_LOG_PATH
 
 
 class RootLogger(BaseStorageLogger):
@@ -29,28 +27,34 @@ class RootLogger(BaseStorageLogger):
     - logging 패키지 기반 전역 로그 환경 구성
     """
 
-    STORAGE_PATH: ClassVar[Path] = LOCAL_APPLICATION_LOG_PATH
+    LOGGER_NAME = None
 
     @classmethod
-    def initialize(cls) -> None:
+    def initialize(
+            cls,
+            storage_path: Union[Path, str],
+    ) -> None:
         """
         애플리케이션 공통 전역 콘솔/파일 로깅 환경 root logger logging 객체 초기화
 
         주의 사항
         - 애플리케이션 시작 시점에 반드시 해당 클래스의 initialize() 호출을 권고
 
+        :param storage_path: 로그 파일을 저장할 경로 Union[Path, str]
         :return: 없음
         """
 
-        # 검증
+        # validate
         if cls._logger is not None:
             return
 
-        if cls.STORAGE_PATH is None:
+        if storage_path is None:
             raise ValueError(
-                f"{cls.__name__} 클래스의 내부에서 관리하는 필수 변수에 대한 초기화 및 설정이 이루어지지 않았습니다. "
+                f"{cls.__name__} 클래스의 초기화에 반드시 필요한 storage_path 가 전달되지 않았습니다. "
                 "코드를 확인해주세요."
             )
+
+        cls.STORAGE_PATH = Path(storage_path)
 
         root_logger = logging.getLogger()
 
