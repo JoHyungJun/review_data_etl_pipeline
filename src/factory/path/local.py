@@ -8,7 +8,7 @@ local.py
 
 from pathlib import Path
 
-from config.constant.path_constants import DATAS_DIRECTORY_PATH
+from config.constant.local.path_constants import LOCAL_DATAS_DIRECTORY_PATH
 from core.config.constant.schema_constants import COMMON
 from core.config.model.config_registry import ConfigRegistry
 
@@ -26,7 +26,7 @@ def build_local_shopping_mall_platform_data_directory_path(
     """
 
     return Path(
-        DATAS_DIRECTORY_PATH
+        LOCAL_DATAS_DIRECTORY_PATH
         / config_registry.get_value(
             section_key=COMMON.SECTION_KEY,
             option_name=COMMON.SHOPPING_MALL_NAME,

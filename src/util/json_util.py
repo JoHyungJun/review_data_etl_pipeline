@@ -21,8 +21,8 @@ def try_parse_json(value: Any) -> Any:
     (ex. {"nested_key": "{\"A\":{\"B\":\"C\"}}"})
     이런 경우에도 정상적인 구조로의 파싱을 위해 활용
 
-    :param value: 파싱 대상 value
-    :return: 파싱된 dict 형태의 json 인스턴스 또는 원본 value
+    :param value: 파싱 대상 value Any
+    :return: 파싱된 dict 형태의 json 인스턴스 또는 원본 value Any
     """
 
     # str 이 아니라면 파싱이 불필요하므로, 로직 미적용
@@ -36,7 +36,10 @@ def try_parse_json(value: Any) -> Any:
     return value
 
 
-def extract_flat_values_from_json(data: Any, prefix: str = "") -> Any:
+def extract_flat_values_from_json(
+        data: Any,
+        prefix: str = ""
+) -> Any:
     """
     nested (dict) 한 구조의 json 데이터를, flat 형태의 단순 구조로 파싱 후 반환
 
@@ -58,9 +61,9 @@ def extract_flat_values_from_json(data: Any, prefix: str = "") -> Any:
     - dict 와 list 가 혼합된 구조의 경우에도 단일 원소까지 재귀 탐색하며, 같은 규칙을 혼용하여 적용함
       (ex. "json.response.data.list.1" = "A")
 
-    :param data: 파싱 대상 nested 구조의 data
-    :param prefix: 최종 key 생성을 위한 재귀 탐색용 prefix
-    :return: flat 구조로 파싱된 data
+    :param data: 파싱 대상 nested 구조의 data Any
+    :param prefix: 최종 key 생성을 위한 재귀 탐색용 prefix str
+    :return: flat 구조로 파싱된 data Any
     """
 
     flat = {}
@@ -94,8 +97,8 @@ def clean_illegal_char(value: Any) -> Any:
     """
     Excel save 에 문제가 발생할 만한 비정상적인 문자 제거 후 반환
 
-    :param value: save 대상 개별 data
-    :return: 비정상적인 문자가 제거된 data str 또는 원본 value
+    :param value: save 대상 개별 data Any
+    :return: 비정상적인 문자가 제거된 data str 또는 원본 value Any
     """
 
     # str 이 아니라면 파싱이 불필요하므로, 로직 미적용
@@ -105,7 +108,10 @@ def clean_illegal_char(value: Any) -> Any:
     return value
 
 
-def build_record(flat_data: dict, target_keys: list[str]) -> dict:
+def build_record(
+        flat_data: dict,
+        target_keys: list[str]
+) -> dict:
     """
     [WARN] Deprecated
 
@@ -152,7 +158,7 @@ def build_record(flat_data: dict, target_keys: list[str]) -> dict:
     - 앞서 설명한 edge case 들로 인해 missing_keys 탐색 로직은 완벽하지 않고, 따라서 missing_keys 로그는 단순 참고만을 권고
 
     :param flat_data: flat 구조로 파싱된 data dict
-    :param target_keys: 추출 대상 및 Excel 열 순서 기준이 되는 key list
+    :param target_keys: 추출 대상 및 Excel 열 순서 기준이 되는 key list[str]
     :return: 최종 추출된 data dict
     """
 
@@ -186,7 +192,7 @@ def build_record(flat_data: dict, target_keys: list[str]) -> dict:
 
 def extract_target_data(
         data: Union[dict[str, Any], list[dict[str, Any]]],
-        json_target_data_path: list[Union[str, Any]]
+        json_target_data_path: list[Union[str, Any]],
 ) -> list[dict]:
     """
     타겟 데이터를 재귀 key 탐색을 통해 접근
@@ -199,8 +205,8 @@ def extract_target_data(
          타겟 데이터는 개별 review 이고, 따라서 전체 review 를 담은 "reviews" 가 타겟 데이터의 상위 key 가 되며,
          따라서 json target data path 는 ["datas", "reviews"] 가 됨)
 
-    :param data: nested 구조의 dict
-    :param json_target_data_path: 타겟 데이터의 접근 key 순서
+    :param data: nested 구조의 Union[dict[str, Any], list[dict[str, Any]]]
+    :param json_target_data_path: 타겟 데이터의 접근 key 순서 list[Union[str, Any]]
     :return: 관심 대상 데이터만 담긴 List[dict]
     """
 

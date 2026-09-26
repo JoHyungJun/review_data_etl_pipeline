@@ -14,7 +14,16 @@ from core.common.bootstrap.sentiment_model_initialize import initialize_sentimen
 
 
 def run_bootstrap(config: BootstrapConfig) -> None:
-    initialize_logger()
-    initialize_config_schema(config.schema_yaml_path, config.schema_constants_py_path)
+    initialize_logger(
+        root_log_path=config.application_log_path,
+        sentiment_event_log_path=config.sentiment_event_log_path,
+        sentiment_config_tuner_statistics_meta_log_path=config.sentiment_config_tuner_statistics_meta_log_path,
+    )
+    initialize_config_schema(
+        schema_yaml_path=config.schema_yaml_path,
+        schema_constants_py_path=config.schema_constants_py_path,
+    )
     initialize_duckdb()
-    initialize_sentiment_model(config.sentiment_model_path)
+    initialize_sentiment_model(
+        sentiment_model_path=config.sentiment_model_path
+    )

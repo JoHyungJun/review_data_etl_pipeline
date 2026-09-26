@@ -12,14 +12,14 @@ config_schema.yml 파일은 해당 메서드의 결과값을 단순 dump 한 것
 """
 
 
-from config.constant.data_types import DataType
-from config.constant.name_constants import (
+from config.constant.common.data_types import DataType
+from config.constant.common.name_constants import (
     COMMON_SECTION_KEY,
     ABLY_SECTION_KEY,
     COUPANG_SECTION_KEY,
     VREVIEW_SECTION_KEY,
 )
-from config.constant.path_constants import CONFIG_SCHEMA_YML_PATH, SCHEMA_CONSTANTS_PY_PATH
+from config.constant.common.path_constants import CONFIG_SCHEMA_YML_PATH, SCHEMA_CONSTANTS_PY_PATH
 from core.config.model.config_base_section_option import Section, Option, OptionMeta
 
 

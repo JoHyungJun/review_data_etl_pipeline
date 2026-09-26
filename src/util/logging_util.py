@@ -18,7 +18,7 @@ import pandas as pd
 from util.path_util import get_file_name_by_path
 
 
-def run_with_logging(log_metadata=None) -> Callable:
+def run_with_logging(log_metadata: Union[dict, Callable] = None) -> Callable:
     """
     반복되는 프로세스 (메서드) 의 시작/끝 구분 로그를 위한 데코레이터 패턴
     로그 목적 로그 파라미터를 받기 위해 데코레이터 팩토리로 구현
@@ -27,7 +27,7 @@ def run_with_logging(log_metadata=None) -> Callable:
     - 로그에 추가적인 log_metadata 가 필요하지 않더라도
       @run_with_logging() 처럼 선언하여야 에러가 발생하지 않음
 
-    :param log_metadata: 로그에 추가할 metadata 관련 dict/callable
+    :param log_metadata: 로그에 추가할 metadata 관련 Union[dict, Callable]
     :return: 데코레이터 패턴용 method Callable
     """
 
@@ -90,12 +90,12 @@ def logging_file_event(
     """
     반복되는 파일 save/load 성공 여부 로그를 위한 로그 출력 전용 메서드
 
-    :param file_path: 대상 파일 경로
-    :param log_prefix: 파일 처리 종류
-    :param log_metadata: 추가 로그 정보
-    :param df: 파일 처리 대상 pandas.DataFrame 데이터
-    :param log_message: 로그 메세지
-    :param log_level: 로그 레벨
+    :param file_path: 대상 파일 경로 Union[Path, str]
+    :param log_prefix: 파일 처리 종류 Literal["LOAD", "SAVE", "DELETE"]
+    :param log_metadata: 추가 로그 정보 Optional[dict]
+    :param df: 파일 처리 대상 Optional[pd.DataFrame]
+    :param log_message: 로그 메세지 Optional[str]
+    :param log_level: 로그 레벨 Literal["info", "debug", "warning", "error", "critical", "exception"]
     :return: 없음
     """
 
@@ -136,12 +136,12 @@ def logging_error_event(
     """
     반복되는 에러 로그를 위한 로그 출력 전용 메서드
 
-    :param exception_instance: 대상 에러 인스턴스
-    :param log_message: 에러 로그 메세지
-    :param log_message_detail: 추가 에러 로그 메세지 (에러 인스턴스 string representation)
-    :param log_metadata: 추가 에러 로그 정보
-    :param log_prefix: 에러 종류
-    :param log_level: 로그 레벨
+    :param exception_instance: 대상 에러 인스턴스 Optional[Exception]
+    :param log_message: 에러 로그 메세지 str
+    :param log_message_detail: 추가 에러 로그 메세지 (에러 인스턴스 string representation) str
+    :param log_metadata: 추가 에러 로그 정보 Optional[Union[dict, str]]
+    :param log_prefix: 에러 종류 str
+    :param log_level: 로그 레벨 Literal["error", "critical", "exception"]
     :return: 없음
     """
 
@@ -190,11 +190,11 @@ def extract_log_info(
     API 의 query params 혹은 payload 데이터에서 특정 key 의 값만을 추출하기 위한 메서드
     로그 메타 데이터 수집 목적으로 활용
 
-    :param method: 대상 API method
-    :param params: 대상 API query parameters
-    :param payload: 대상 API payload
-    :param log_type: 대상 API 에서의 데이터 수집 위지 ("params"/"payload")
-    :param log_keys: 수집할 데이터의 key list
+    :param method: 대상 API method str
+    :param params: 대상 API query parameters Optional[dict]
+    :param payload: 대상 API payload Optional[dict]
+    :param log_type: 대상 API 에서의 데이터 수집 위지 Optional[Literal["params", "payload"]]
+    :param log_keys: 수집할 데이터의 key Optional[list]
     :return: 추출, 수집, 통합 및 포맷팅 된 전체 로그 str
     """
 

@@ -6,15 +6,23 @@ logger_initialize.py
 """
 
 
+from pathlib import Path
+from typing import Union
+
 from core.common.log.root_logger import RootLogger
 from process.core.postprocess.postprocessing.postprocessor.common.sentiment.log.model.logger.sentiment_config_tuner_statistics_meta_logger import \
     SentimentConfigTunerStatisticsMetaLogger
-from process.core.postprocess.postprocessing.postprocessor.common.sentiment.log.model.logger.sentiment_inferred_logger import \
+from process.core.postprocess.postprocessing.postprocessor.common.sentiment.log.model.logger.sentiment_event_logger import \
     SentimentEventLogger
+
 from util.logging_util import logging_error_event
 
 
-def initialize_logger() -> None:
+def initialize_logger(
+        root_log_path: Union[Path, str],
+        sentiment_event_log_path: Union[Path, str],
+        sentiment_config_tuner_statistics_meta_log_path: Union[Path, str],
+) -> None:
     """
     애플리케이션 프로세스 실행에 요구되는 logger 관련
     초기화 및 setup 수행
@@ -28,9 +36,15 @@ def initialize_logger() -> None:
     """
 
     try:
-        RootLogger.initialize()
-        SentimentEventLogger.initialize()
-        SentimentConfigTunerStatisticsMetaLogger.initialize()
+        RootLogger.initialize(
+            storage_path=root_log_path
+        )
+        SentimentEventLogger.initialize(
+            storage_path=sentiment_event_log_path
+        )
+        SentimentConfigTunerStatisticsMetaLogger.initialize(
+            storage_path=sentiment_config_tuner_statistics_meta_log_path
+        )
 
     except Exception as e:
         logging_error_event(

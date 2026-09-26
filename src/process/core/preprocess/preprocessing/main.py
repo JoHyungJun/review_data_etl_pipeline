@@ -10,7 +10,7 @@ preprocessing 의 실행부
 """
 
 
-from config.constant.name_constants import (
+from config.constant.common.name_constants import (
     REVIEW_SCRAPING_OUTPUT_XLSX_FILE_NAME,
     VREVIEW_ID_TO_PLATFORM_ID_MAPPING_XLSX_FILE_NAME,
     VREVIEW_ID_TO_PRODUCT_OPTION_MAPPING_XLSX_FILE_NAME,
@@ -18,7 +18,7 @@ from config.constant.name_constants import (
     ORDER_HISTORY_SCRAPING_OUTPUT_XLSX_FILE_NAME, VREVIEW_DIRECTORY_NAME, ABLY_DIRECTORY_NAME,
 )
 from core.common.bootstrap import run_bootstrap
-from factory.bootstrap.bootstrap_config import LOCAL_BOOTSTRAP_CONFIG
+from factory.bootstrap.config.local import LOCAL_BOOTSTRAP_CONFIG
 from factory.config.registry.local import build_local_config_registry
 from factory.path.local import build_local_shopping_mall_platform_data_directory_path
 from factory.process.scraping.review_scraping_builder import (

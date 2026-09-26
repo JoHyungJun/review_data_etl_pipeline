@@ -6,7 +6,7 @@ local.py
 """
 
 
-from config.constant.name_constants import (
+from config.constant.common.name_constants import (
     REVIEW_SCRAPING_OUTPUT_XLSX_FILE_NAME,
     ORDER_HISTORY_SCRAPING_OUTPUT_XLSX_FILE_NAME,
     PREPROCESSING_OUTPUT_XLSX_FILE_NAME,

@@ -21,7 +21,7 @@ from util.logging_util import logging_file_event, logging_error_event
 
 @contextmanager
 def stream_lines_between_bytes_from_jsonl(
-        file_path: Union[str, Path],
+        file_path: Union[Path, str],
         start_byte: Optional[int] = None,
         end_byte: Optional[int] = None,
 ) -> Iterator[Iterator[tuple[str, int]]]:
@@ -162,7 +162,7 @@ def load_lines_before_byte_from_jsonl(
     """
 
     try:
-        # 검증
+        # validate
         if load_line_count <= 0:
             raise ValueError("파라미터인 load_line_count 는 1 이상의 값이어야 합니다. 코드를 확인해주세요.")
 

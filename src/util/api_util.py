@@ -19,8 +19,8 @@ def get_encoded_url(base_url: str, params: dict) -> str:
     """
     기본 문자열 URL 을 인코딩하여 반환
 
-    :param base_url: URL 기본 경로
-    :param params: URL query parameters
+    :param base_url: URL 기본 경로 str
+    :param params: URL query parameters dict
     :return: 인코딩된 최종 URL str
     """
 
@@ -54,16 +54,16 @@ def get_response_safely_with_retries(
     최대 설정된 횟수 (max_retries) 만큼  API request 를 시도하고,
     로그 처리 및 response 데이터 반환
 
-    :param method: HTTP method
-    :param base_url: URL 기본 경로
-    :param params: URL query parameters
-    :param headers: headers
-    :param payload: body (json)
-    :param files: 전송할 files
-    :param max_retries: 최대 재시도 횟수
-    :param delay_seconds: 재시도 간격 (초 단위)
-    :param log_type: 로그 추출 대상 type ("params"/"payload")
-    :param log_keys: 로그 추출 대상 데이터의 key
+    :param method: HTTP method str
+    :param base_url: URL 기본 경로 str
+    :param params: URL query parameters Optional[dict]
+    :param headers: headers Optional[dict]
+    :param payload: body (json) Optional[dict]
+    :param files: 전송할 files Optional[dict]
+    :param max_retries: 최대 재시도 횟수 int
+    :param delay_seconds: 재시도 간격 (초 단위) float
+    :param log_type: 로그 추출 대상 type Optional[Literal["params", "payload"]]
+    :param log_keys: 로그 추출 대상 데이터의 key Optional[list]
     :return: request 성공 여부에 따른 Optional[requests.Response]
     """
 
@@ -123,17 +123,17 @@ def get_expected_status_response_safely_with_retries(
     최대 설정된 횟수 (max_retries) 만큼  API request 를 시도하고,
     로그 처리 및 response 데이터 반환
 
-    :param method: HTTP method
-    :param base_url: URL 기본 경로
-    :param params: URL query parameters
-    :param headers: headers
-    :param payload: body (json)
-    :param files: 전송할 files
-    :param expected_status_codes: 상태 코드 기댓값
-    :param max_retries: 최대 재시도 횟수
-    :param delay_seconds: 재시도 간격 (초 단위)
-    :param log_type: 로그 추출 대상 type ("params"/"payload")
-    :param log_keys: 로그 추출 대상 데이터의 key
+    :param method: HTTP method str
+    :param base_url: URL 기본 경로 str
+    :param params: URL query parameters Optional[dict]
+    :param headers: headers Optional[dict]
+    :param payload: body (json) Optional[dict]
+    :param files: 전송할 files Optional[dict]
+    :param expected_status_codes: 상태 코드 기댓값 Optional[set]
+    :param max_retries: 최대 재시도 횟수 int
+    :param delay_seconds: 재시도 간격 (초 단위) float
+    :param log_type: 로그 추출 대상 type Optional[Literal["params", "payload"]]
+    :param log_keys: 로그 추출 대상 데이터의 key Optional[list]
     :return: request 성공 여부에 따른 Optional[requests.Response]
     """
 
@@ -189,7 +189,7 @@ def get_snos_hash(snos: list[int]) -> int:
     """
     sno List 를 해싱하여 하나의 고유 key (해당 List 의 pk) 생성
 
-    :param snos: sno List
+    :param snos: sno list[int]
     :return: sno List 를 해싱한 고유 식별자 key (pk) int
     """
 
@@ -202,8 +202,8 @@ def is_duplicate_snos(snos: list[int], seen_sno_hashes: set[int]) -> bool:
     해당 sno list (snos) 를 해싱하고
     해당 해싱 값이 이전에 수집 되었던 해싱된 sno list 의 모음 (seen_sno_hashes) 중 하나와 중복되는지 검증
 
-    :param snos: 현재 확인할 sno List
-    :param seen_sno_hashes: 이미 확인된 sno set
+    :param snos: 현재 확인할 list[int]
+    :param seen_sno_hashes: 이미 확인된 sno set[int]
     :return: 존재 (중복) 여부 bool
     """
 

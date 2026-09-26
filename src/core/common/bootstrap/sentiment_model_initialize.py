@@ -15,7 +15,7 @@ from process.core.postprocess.postprocessing.postprocessor.common.sentiment.mode
 from util.logging_util import logging_error_event
 
 
-def initialize_sentiment_model(sentiment_model_path: Union[str, Path]) -> None:
+def initialize_sentiment_model(sentiment_model_path: Union[Path, str]) -> None:
     """
     애플리케이션 프로세스 실행에 요구되는 감성 추론 모델 설정 관련
     초기화 및 setup 수행
@@ -24,7 +24,7 @@ def initialize_sentiment_model(sentiment_model_path: Union[str, Path]) -> None:
     - 감성 추론 모델 정적 설정 정보 관리 sentiment config 초기화
     - 감성 추론 모델 관리 sentiment model 초기화
 
-    :param sentiment_model_path: 감성 추론 모델이 위치하는 디렉토리 경로 Union[str, Path]
+    :param sentiment_model_path: 감성 추론 모델이 위치하는 디렉토리 경로 Union[Path, str]
     :return: 없음
     """
 

@@ -212,7 +212,7 @@ def build_flatten_indexed_columns_mapping(
     if not isinstance(source_indexed_key, str) or not isinstance(target_indexed_key, str):
         return {}
 
-    # 검증
+    # validate
     # target_indexed None or X
     if target_indexed_mapping is None or target_indexed_mapping.get(target_indexed_key) is None:
 

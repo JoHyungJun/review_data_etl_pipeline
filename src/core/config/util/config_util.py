@@ -114,13 +114,13 @@ def to_serializable(obj: Any) -> Optional[Any]:
 
 def dump_schema_to_yaml(
         schema_dict: dict,
-        yaml_output_path: Union[str, Path],
+        yaml_output_path: Union[Path, str],
 ) -> dict:
     """
     스키마 dict 를 YAML 포맷으로 파싱하여 save
 
     :param schema_dict: 스키마 dict
-    :param yaml_output_path: 출력 YAML 경로
+    :param yaml_output_path: 출력 YAML 경로 Union[Path, str]
     :return: 직렬화된 dict
     """
 

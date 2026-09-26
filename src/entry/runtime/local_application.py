@@ -15,21 +15,21 @@ local_application.py
 
 import logging
 
-from config.constant.name_constants import (
+from config.constant.common.name_constants import (
     SRC_DIRECTORY_NAME,
     DATAS_DIRECTORY_NAME,
     SENTIMENT_MODEL_DIRECTORY_NAME,
     CONFIG_DIRECTORY_NAME,
     LOGS_DIRECTORY_NAME,
 )
-from config.constant.path_constants import BASE_DIRECTORY_PATH
+from config.constant.common.path_constants import BASE_DIRECTORY_PATH
 from core.base.pipeline.base_process_pipeline import BaseProcessPipeline
 from core.common.bootstrap import run_bootstrap
 from core.config.constant.schema_constants import COMMON
 from domain.export.export import Export
 from entry.orchestration.export_pipeline_applier import export_pipeline_applier
 from error.config import ConfigNotAvailableError
-from factory.bootstrap.bootstrap_config import LOCAL_BOOTSTRAP_CONFIG
+from factory.bootstrap.config.local import LOCAL_BOOTSTRAP_CONFIG
 from factory.config.registry.local import build_local_config_registry
 from util.logging_util import logging_error_event
 

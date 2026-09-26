@@ -13,7 +13,7 @@ import shutil
 from pathlib import Path
 from typing import Union, Optional, Any
 
-from config.constant.name_constants import *
+from config.constant.common.name_constants import *
 from src.util.datetime_util import get_validated_date_by_str
 
 
@@ -49,9 +49,9 @@ def get_root_directory() -> Path:
 
 
 def get_or_create_directory(
-    base_path: Optional[Union[str, Path]] = None,
+    base_path: Optional[Union[Path, str]] = None,
     directory_name: Optional[str] = None,
-    full_path: Optional[Union[str, Path]] = None,
+    full_path: Optional[Union[Path, str]] = None,
 ) -> Path:
     """
     탐색 경로의 디렉토리 경로를 반환하거나,
@@ -60,9 +60,9 @@ def get_or_create_directory(
     파라미터엔 full_path / base_path + directory_name 두 조합 중 하나는 반드시 입력해야 하며,
     파라미터가 모두 설정 됐을 시 full_path 가 base_path + directory_name 보다 우선 순위를 가짐
 
-    :param base_path: 기준 경로 (탐색 대상 최종 디렉토리 기준 부모 디렉토리) Union[str, Path]
+    :param base_path: 기준 경로 (탐색 대상 최종 디렉토리 기준 부모 디렉토리) Optional[Union[Path, str]]
     :param directory_name: 탐색 대상 디렉토리명 str
-    :param full_path: 탐색 대상 전체 경로 Union[str, Path]
+    :param full_path: 탐색 대상 전체 경로 Optional[Union[Path, str]]
     :return: 존재하는 혹은 새로 생성된 디렉토리 전체 경로 Path
     """
 
@@ -115,7 +115,7 @@ def get_period_directory_name(start_date: str, end_date: str) -> str:
 def get_or_create_date_period_directory(
         start_date: str,
         end_date: str,
-        base_path: Union[str, Path],
+        base_path: Union[Path, str],
 ) -> Path:
     """
     기준 경로 + 기간별 포맷 명의 디렉토리 경로를 반환하거나,
@@ -123,8 +123,8 @@ def get_or_create_date_period_directory(
 
     :param start_date: 시작 날짜 str
     :param end_date: 종료 날짜 str
-    :param base_path: 기준 경로 (탐색 대상 최종 디렉토리 기준 부모 디렉토리)
-    :return: 존재하는 혹은 새로 생성된 '기준 경로 + 기간별 포맷명' 의 디렉토리 경로
+    :param base_path: 기준 경로 (탐색 대상 최종 디렉토리 기준 부모 디렉토리) Union[Path, str]
+    :return: 존재하는 혹은 새로 생성된 '기준 경로 + 기간별 포맷명' 의 디렉토리 경로 Path
     """
 
     period_directory_name = get_period_directory_name(
@@ -132,7 +132,7 @@ def get_or_create_date_period_directory(
         end_date=end_date,
     )
 
-    return get_or_create_directory(base_path=base_path, directory_name=period_directory_name)
+    return get_or_create_directory(base_path=Path(base_path), directory_name=period_directory_name)
 
 
 def get_file_name_by_path(path: Union[Path, str]) -> str:

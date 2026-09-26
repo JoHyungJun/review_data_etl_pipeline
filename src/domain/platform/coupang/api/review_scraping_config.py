@@ -39,7 +39,7 @@ class CoupangReviewScrapingConfig(BaseScrapingConfig):
             per_page: int,
             start_date: str,
             end_date: str,
-            output_directory_path: Union[str, Path, None] = None,
+            output_directory_path: Optional[Union[Path, str]] = None,
             max_retries: int = 3,
             delay_seconds: float = 1.0,
     ):

@@ -21,12 +21,16 @@ from process.core.postprocess.postprocessing.postprocessor.common.sentiment.conf
     calculate_optimal_max_text_length, calculate_optimal_memory_usage_ratio
 from process.core.postprocess.postprocessing.postprocessor.common.sentiment.log.model.logger.sentiment_config_tuner_statistics_meta_logger import \
     SentimentConfigTunerStatisticsMetaLogger
-from process.core.postprocess.postprocessing.postprocessor.common.sentiment.log.model.logger.sentiment_inferred_logger import SentimentEventLogger
+from process.core.postprocess.postprocessing.postprocessor.common.sentiment.log.model.logger.sentiment_event_logger import \
+    SentimentEventLogger
 
 from process.core.postprocess.postprocessing.postprocessor.common.sentiment.log.model.models import (
     SentimentConfigTunerStatisticsMetaLog,
     SentimentInferredLog,
-    SentimentIntervalStatisticsLog, SentimentConfigTunerMetaLog, SentimentOOMFallbackLog, BaseSentimentLog,
+    SentimentIntervalStatisticsLog,
+    SentimentConfigTunerMetaLog,
+    SentimentOOMFallbackLog,
+    BaseSentimentLog,
 )
 from process.core.postprocess.postprocessing.postprocessor.common.sentiment.log.util.log_util import \
     group_sentiment_logs_by_event_type
@@ -110,7 +114,7 @@ class SentimentConfigTuner:
                 else None
             )
 
-            # 검증
+            # validate
             is_required_full_scan = False
             latest_meta_log = None
 

@@ -13,7 +13,7 @@ from __future__ import annotations
 from inspect import signature
 from typing import Union, Optional, Any
 
-from config.constant.data_types import DataType, get_parsed_value_by_data_type
+from config.constant.common.data_types import DataType, get_parsed_value_by_data_type
 from error.config import ConfigNotAvailableError
 
 

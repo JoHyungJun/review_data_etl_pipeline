@@ -24,7 +24,7 @@ def platform_to_export_product_id_mapping_preprocessing(
         product_id_mapping_df: pd.DataFrame,
         source_attribute_schema: Type[BaseProductIdMappingAttributeSchema],
         target_attribute_schema: Optional[Type[BaseAttributeSchema]] = None,
-        file_path: Union[str, Path] = None,
+        file_path: Optional[Union[Path, str]] = None,
 ) -> pd.DataFrame:
     """
     리뷰가 수집된 플랫폼 기준 상품 id 와 export 플랫폼에 등록된 상품 id 매핑 정보 데이터 전처리 및 DataFrame 반환
@@ -36,7 +36,7 @@ def platform_to_export_product_id_mapping_preprocessing(
     :param product_id_mapping_df: {리뷰 플랫폼 기준 상품 id - export 플랫폼별 상품 id} 매핑 데이터 pandas.DataFrame
     :param source_attribute_schema: 매핑 데이터의 컬럼명 정보를 담은 BaseReviewAttributeSchema
     :param target_attribute_schema: 매핑할 컬럼명 정보를 담은 BaseAttributeSchema (Optional)
-    :param file_path: 로그를 위한 파일 경로 (Optional)
+    :param file_path: 로그를 위한 파일 경로 Optional[Union[Path, str]]
     :return: 전처리된 상품 id 매핑 데이터 pandas.DataFrame
     """
 

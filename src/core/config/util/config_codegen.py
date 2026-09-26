@@ -23,12 +23,15 @@ from util.logging_util import logging_file_event
 from util.path_util import get_or_create_directory, get_relative_path
 
 
-def generate_constants_from_schema(schema: dict[str, Section], constants_output_path: Union[str, Path]) -> None:
+def generate_constants_from_schema(
+        schema: dict[str, Section],
+        constants_output_path: Union[Path, str]
+) -> None:
     """
     스키마 dict 를 기반으로 Section 및 Option 명 상수 모듈 자동 생성
 
     :param schema: schema dict[str, Section]
-    :param constants_output_path: 상수 모듈 output save 경로 Union[str, Path]
+    :param constants_output_path: 상수 모듈 output save 경로 Union[Path, str]
     :return: 없음
     """
 

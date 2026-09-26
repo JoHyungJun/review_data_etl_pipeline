@@ -8,7 +8,7 @@ logging 및 로그 내용을 저장하는 logger 관련 공통 속성 클래스 
 
 from abc import abstractmethod
 from pathlib import Path
-from typing import ClassVar, Optional
+from typing import ClassVar, Optional, Union
 
 from core.base.log.base_logger import BaseLogger
 
@@ -24,8 +24,8 @@ class BaseStorageLogger(BaseLogger):
     initialize() 에 logging 객체 관련 초기화, 포맷터, 파일 핸들러 등의 과정이 명시되어야 함
 
     주의 사항
-    - 클래스 내부에서 관리되는 logger name, log path 정보는 initialize() 내부, 혹은 클래스 선언 시점에서의 초기화를 강제
-    - logger name 정보에 대한 정의는 Optional, storage path 정보에 대한 정의는 Required
+    - 클래스 내부에서 관리되는 LOGGER_NAME 은 클래스 선언 시점에 강제,
+      STORAGE_PATH 정보는 initialize() 시점에서의 초기화를 강제
     """
 
     LOGGER_NAME: ClassVar[Optional[str]] = None
@@ -33,14 +33,19 @@ class BaseStorageLogger(BaseLogger):
 
     @classmethod
     @abstractmethod
-    def initialize(cls) -> None:
+    def initialize(
+            cls,
+            storage_path: Union[Path, str],
+    ) -> None:
         """
         클래스 내부에서 관리하는 변수 및 logging 객체에 대한 초기화 및 설정
 
+        :param storage_path: 로그 파일을 저장할 경로 Union[Path, str]
         :return: 없음
         """
 
         pass
+
 
     @classmethod
     def _is_initialized(cls) -> bool:
@@ -48,6 +53,7 @@ class BaseStorageLogger(BaseLogger):
             super()._is_initialized()
             and cls.STORAGE_PATH is not None
         )
+
 
     @classmethod
     def get_storage_path(cls) -> Optional[Path]:

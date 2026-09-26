@@ -4,6 +4,8 @@ excel_util.py
 
 Excel 의 포맷팅/삽입/삭제/연산 관련 util 모듈
 """
+
+
 import io
 import logging
 import re
@@ -31,7 +33,7 @@ def get_sheet_name_safely(raw_sheet_name: str) -> str:
     - 빈 시트명은 "Unknown_Sheet" 으로 설정
     - 시트명 최대 길이인 31 글자까지만 허용
 
-    :param raw_sheet_name: 처리 대상 시트명
+    :param raw_sheet_name: 처리 대상 시트명 str
     :return: 전처리 후의 시트명 str
     """
 
@@ -43,16 +45,18 @@ def get_sheet_name_safely(raw_sheet_name: str) -> str:
     return sanitized_sheet_name[:31]
 
 
-def get_all_excel_files_from_directory(directory_path: Path) -> list[Path]:
+def get_all_excel_files_from_directory(directory_path: Union[Path, str]) -> list[Path]:
     """
     특정 directory path 의 모든 Excel 에 대하여 Path 목록을 반환
 
     - directory path 존재 여부 검증
     - path 가 directory path 가 맞는지 여부 검증
 
-    :param directory_path: 전체 Excel 을 가져올 대상 directory path
+    :param directory_path: 전체 Excel 을 가져올 대상 directory Union[Path, str]
     :return: 해당 directory path 에 존재하는 개별 Excel 경로 list[Path]
     """
+
+    directory_path = Path(directory_path)
 
     if not directory_path.exists():
         raise FileNotFoundError(f"존재하지 않는 디렉토리 경로입니다. 경로를 확인해주세요. : {directory_path}")
@@ -64,17 +68,17 @@ def get_all_excel_files_from_directory(directory_path: Path) -> list[Path]:
 
 
 def merge_target_excel_columns_from_directory(
-        directory_path: Union[str, Path],
+        directory_path: Union[Path, str],
         target_headers: list[str],
-        output_file_path: Union[str, Path]
+        output_file_path: Union[Path, str],
 ) -> Optional[pd.DataFrame]:
     """
     특정 directory path 의 모든 Excel 에 대하여
     target_headers 컬럼만 추출하여 하나의 DataFrame 으로 합치고, 하나의 Excel 로 통합하여 save
 
-    :param directory_path: 전체 Excel 을 가져올 대상 directory path
-    :param target_headers: 추출 대상 컬럼명 list
-    :param output_file_path: 최종 산출물 Excel save 경로
+    :param directory_path: 전체 Excel 을 가져올 대상 directory 경로 Union[Path, str]
+    :param target_headers: 추출 대상 컬럼명 list[str]
+    :param output_file_path: 최종 산출물 Excel save 경로 Union[Path, str]
     :return: 결과 Optional[pandas.DataFrame] (에러 발생 혹은 결과 데이터 없을 시 None 반환)
     """
 

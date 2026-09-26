@@ -21,7 +21,7 @@ class BaseStorageSpec(ABC):
     """
 
     # 상위 root 저장소 경로 (ex. Excel -> 디렉토리 경로 / DB -> 연결 엔드포인트)
-    root_path: Union[str, Path]
+    root_path: Union[Path, str]
 
     # 최소 단위 저장소 식별자 (ex. Excel -> 파일명 / DB -> 테이블명)
     resource_name: str

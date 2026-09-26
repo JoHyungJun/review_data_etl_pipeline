@@ -57,14 +57,14 @@ class DuckDBQueryBuilder:
 
     @staticmethod
     def build_excel_load_query(
-            file_path: Union[str, Path],
+            file_path: Union[Path, str],
             sheet_name: str,
             query_spec: Optional[BaseLoadQuerySpec],
     ) -> str:
         """
         경로 정보를 받아 전체 Excel 데이터를 load 할 쿼리를 반환
 
-        :param file_path: Excel 경로 Union[str, Path]
+        :param file_path: Excel 경로 Union[Path, str]
         :param sheet_name: 대상 시트명 str
         :param query_spec: load 관련 쿼리 정보 Optional[BaseLoadQuerySpec]
         :return: load 전체 쿼리문 str
@@ -194,7 +194,7 @@ class DuckDBQueryBuilder:
         :return: 조건에 맞는 join 쿼리 Optional[str]
         """
 
-        # 검증 로직
+        # validate
         # join_keys 파라미터 검증
         def is_empty(columns):
             return columns is None or (isinstance(columns, Sized) and len(columns) == 0)

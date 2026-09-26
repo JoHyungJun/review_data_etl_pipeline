@@ -19,7 +19,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import ClassVar
 
-from config.constant.name_constants import SENTIMENT_CONFIG_JSON_FILE_NAME
+from config.constant.common.name_constants import SENTIMENT_CONFIG_JSON_FILE_NAME
 from util.logging_util import logging_error_event
 from util.validate_util import get_validated_between_zero_and_one_float, get_validated_over_one_float, \
     get_validated_and_parsed_unsigned_int
