@@ -11,7 +11,9 @@ import time
 import requests
 from typing import Optional, Literal
 from urllib.parse import urlencode
+from fastapi import status
 
+from error.api import ExternalScrapingApiAuthenticationExpiredError
 from util.logging_util import extract_log_info, logging_error_event
 
 
@@ -123,6 +125,11 @@ def get_expected_status_response_safely_with_retries(
     최대 설정된 횟수 (max_retries) 만큼  API request 를 시도하고,
     로그 처리 및 response 데이터 반환
 
+    주의 사항
+    - 해당 메서드는 외부 API 통신을 담당하므로,
+      에러 발생 시 애플리케이션 내부 규약에 따라 일부 특정 에러 response 를 커스텀 에러로 raise 함
+
+
     :param method: HTTP method str
     :param base_url: URL 기본 경로 str
     :param params: URL query parameters Optional[dict]
@@ -151,6 +158,7 @@ def get_expected_status_response_safely_with_retries(
     ) or ""
 
     # 성공적인 response 데이터/상태 코드 응답까지 max_retries 만큼 API request 시도
+    response = None
     for attempt in range(1, max_retries + 1):
         response = get_response_safely_with_retries(
             method=method,
@@ -159,22 +167,40 @@ def get_expected_status_response_safely_with_retries(
             headers=headers,
             payload=payload,
             files=files,
-            max_retries=max_retries,
+            max_retries=1,
             delay_seconds=delay_seconds,
         )
 
-        if response and response.status_code in expected_status_codes:
-            logging.debug(f"[SUCCESS] {log_metadata + ', ' if log_metadata else ''}"
-                          f"status={response.status_code}, base_url={base_url}: API response")
-            return response
+        # success
+        if response is not None:
+            if response.status_code in expected_status_codes:
+                logging.debug(f"[SUCCESS] {log_metadata + ', ' if log_metadata else ''}"
+                              f"status={response.status_code}, base_url={base_url}: API response")
+                return response
 
-        logging.warning(f"[FAILED] {log_metadata + ', ' if log_metadata else ''}"
-                        f"status={response.status_code}, base_url={base_url}: [{attempt}/{max_retries}] Response failed"
-                        f" - {response.text}")
+        # failed
+        if response is not None:
+            logging.warning(
+                f"[FAILED] {log_metadata + ', ' if log_metadata else ''}"
+                f"status={response.status_code}, base_url={base_url}: "
+                f"[{attempt}/{max_retries}] Response failed - {response.text}"
+            )
+        else:
+            logging.warning(
+                f"[FAILED] {log_metadata + ', ' if log_metadata else ''}"
+                f"[{attempt}/{max_retries}] Response failed - No response"
+            )
 
         # 과도한 API 요청 방지를 위한 재시도 간격 (delay_seconds) 만큼 request 휴식
         if attempt < max_retries:
             time.sleep(delay_seconds)
+
+    # 특정 에러 status code 의 경우 raise
+    if response is not None:
+        if response.status_code == status.HTTP_401_UNAUTHORIZED:
+            raise ExternalScrapingApiAuthenticationExpiredError(
+                "API 토큰이 만료되었습니다. 외부 설정값을 확인해주세요."
+            )
 
     # 최대 횟수 (max_retries) 모두 실패 시 로그 처리 및 None 반환
     logging_error_event(
