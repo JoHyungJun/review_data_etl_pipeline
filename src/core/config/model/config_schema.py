@@ -20,6 +20,8 @@ from config.constant.common.name_constants import (
     VREVIEW_SECTION_KEY,
 )
 from config.constant.common.path_constants import CONFIG_SCHEMA_YML_PATH, SCHEMA_CONSTANTS_PY_PATH
+from config.constant.local.path_constants import LOCAL_APPLICATION_LOG_PATH
+from core.common.log.root_logger import RootLogger
 from core.config.model.config_base_section_option import Section, Option, OptionMeta
 
 
@@ -49,7 +51,7 @@ def get_default_schema() -> dict[str, Section]:
             key='shopping_mall_name',
             value=None,
             meta=OptionMeta(
-                is_required=False,
+                is_required=True,
                 default_value=None,
                 data_type=DataType.STR,
                 description='수집 요청 회사명'
@@ -59,7 +61,7 @@ def get_default_schema() -> dict[str, Section]:
     common_section.add_option(
         Option(
             key='export_id',
-            value='vreview',
+            value=None,
             meta=OptionMeta(
                 is_required=True,
                 default_value=None,
@@ -74,7 +76,7 @@ def get_default_schema() -> dict[str, Section]:
             value=None,
             meta=OptionMeta(
                 is_required=True,
-                default_value='2019-10-01',
+                default_value=None,
                 data_type=DataType.DATE,
                 description='API 수집 시작 날짜',
             ),
@@ -294,4 +296,5 @@ if __name__ == "__main__":
     # 순환 참조 방지
     from core.common.bootstrap.config_schema_initialize import initialize_config_schema
 
+    RootLogger.initialize(storage_path=LOCAL_APPLICATION_LOG_PATH)
     initialize_config_schema(CONFIG_SCHEMA_YML_PATH, SCHEMA_CONSTANTS_PY_PATH)

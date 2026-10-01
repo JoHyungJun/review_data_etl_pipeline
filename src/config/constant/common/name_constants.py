@@ -21,9 +21,6 @@ SENTIMENT_MODEL_DIRECTORY_NAME = "sentiment_model"
 CONFIG_DIRECTORY_NAME = "config"
 LOGS_DIRECTORY_NAME = "logs"
 
-SRC_CONFIG_DIRECTORY_NAME = "config"
-CONFIG_CONSTANTS_DIRECTORY_NAME = "constants"
-
 
 # ------------------------------------------
 # 플랫폼별 상수
@@ -57,7 +54,7 @@ VREVIEW_SECTION_KEY = "vreview"
 
 CONFIG_INI_FILE_NAME = "config.ini"
 CONFIG_SCHEMA_YML_FILE_NAME = "config_schema.yml"
-SCHEMA_CONSTANTS_PY_FILE_NAME = "../../../core/config/constant/schema_constants.py"
+SCHEMA_CONSTANTS_PY_FILE_NAME = "schema_constants.py"
 
 SENTIMENT_CONFIG_JSON_FILE_NAME = "sentiment_config.json"
 

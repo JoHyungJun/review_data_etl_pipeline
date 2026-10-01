@@ -58,11 +58,10 @@ from util.runtime_environment_util import (
 )
 
 
-# TRAINED_SENTIMENT_MODEL_DIRECTORY_PATH
 @run_with_logging(
-    lambda *args, **kwargs: (
-        {"platform": kwargs["platform"].get_platform_eng_name()}
-        if kwargs.get("platform") is not None
+    lambda platform, **_: (
+        {"platform": platform.get_platform_eng_name()}
+        if platform is not None
         else {}
     )
 )
@@ -81,7 +80,6 @@ def sentiment_model_applying(
     - 해당 로직 수행 중 발생하는 에러에 대한 상세 정보는 sentiment 전용 로그에 작성
 
     :param platform: 감성 추론 대상 데이터의 플랫폼 정보 Optional[Platform]
-                     (로그 처리를 위한 인자이며, 반드시 keyword argument 방식으로 인자를 넘겨야 함)
     :param df: 보정 대상 pandas.DataFrame
     :param target_texts_column: 보정 대상 df 의 관련 컬럼명 str
     :return: 보정된 pandas.DataFrame

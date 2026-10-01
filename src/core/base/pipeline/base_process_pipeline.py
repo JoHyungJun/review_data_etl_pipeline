@@ -11,6 +11,7 @@ base_process_pipeline.py
 
 
 from abc import ABC, abstractmethod
+from pathlib import Path
 
 from domain.platform.platform import Platform
 
@@ -20,14 +21,15 @@ class BaseProcessPipeline(ABC):
     파이프라인 공통 속성 추상 클래스
 
     파이프라인 기본 정보와 4 개의 주요 파이프라인 단계 및 전체 실행 메서드의 구현 강제
-
-    해당 클래스를 상속하는 클래스가 config registry 를 필요로 한다면
-    ConfigRegistryRequired 마커 클래스를 상속하여 구현되어야 함
     """
 
     @classmethod
     @abstractmethod
     def get_platform(cls) -> Platform:
+        pass
+
+    @abstractmethod
+    def get_final_output_path(self) -> Path:
         pass
 
     @abstractmethod
@@ -56,6 +58,8 @@ class BaseProcessPipeline(ABC):
 
         주의 사항
         - 개별 파이프라인 로직 수행 중 발생하는 에러는 반드시 외부로 전파해야 하는 규칙을 따름
+        - 파이프라인은 전체 실행 후 최종 결과물을 save 해야 하는 강제성을 가지며,
+          save 경로에 대한 정보는 get_final_output_path() 에서 구현해야 함
         """
 
         pass

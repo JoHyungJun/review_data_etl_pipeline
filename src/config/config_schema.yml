@@ -13,12 +13,12 @@ common:
       value: null
       meta:
         default_value: null
-        is_required: false
+        is_required: true
         description: 수집 요청 회사명
         data_type: str
     export_id:
       key: export_id
-      value: vreview
+      value: null
       meta:
         default_value: null
         is_required: true
@@ -28,7 +28,7 @@ common:
       key: start_date
       value: null
       meta:
-        default_value: '2019-10-01'
+        default_value: null
         is_required: true
         description: API 수집 시작 날짜
         data_type: date

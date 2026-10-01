@@ -20,15 +20,12 @@ from enum import Enum
 from config.constant.common.name_constants import VREVIEW_SECTION_KEY
 
 
-class Export(Enum):
+class Export(str, Enum):
 
     VREVIEW = VREVIEW_SECTION_KEY
 
-    def __init__(self, export_id: str):
-        self._export_id = export_id
-
-    def get_platform_id(self) -> str:
-        return self._export_id
+    def get_export_id(self) -> str:
+        return self.value
 
     @classmethod
     def from_id(cls, export_id: str) -> Export:

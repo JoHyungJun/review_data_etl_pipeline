@@ -1,10 +1,10 @@
 """
-base_config_adapter.py
-----------------------
+base_section_based_config_adapter.py
+------------------------------------
 
 외부 파일에 작성된 설정값 파싱을 위한 추상 클래스 모듈
 
-외부 설정 파일 (INI, Excel 등) 로부터 설정 데이터를 load 하여
+외부 설정 파일 (INI, Excel, API 등) 로부터 설정 데이터를 load 하여
 프로젝트 설정값 관리 표준 구조 (Dict[str, Section]) 로 변환하기 위한 추상화 인터페이스를 제공
 
 주의 사항
@@ -18,16 +18,15 @@ base_config_adapter.py
 
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Dict
 
 from core.config.model.config_base_section_option import Section
 
 
-class BaseConfigAdapter(ABC):
+class BaseSectionBasedConfigAdapter(ABC):
 
     @classmethod
     @abstractmethod
-    def load_to_section_based_dict(cls, file_path: Path) -> Dict[str, Section]:
+    def load_to_section_based_dict(cls, file_path: Path) -> dict[str, Section]:
         """
         외부 파일에 작성된 설정값 load 및
         Section-based 구조의 dict 으로 반환

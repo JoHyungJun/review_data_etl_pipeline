@@ -15,7 +15,7 @@ def build_ably_order_history_scraping_config(config_registry: ConfigRegistry) ->
     """
     A-bly 의 주문 내역 scraping API 관련 config 인스턴스인 AblyOrderHistoryScrapingConfig 를 반환
 
-    :param config_registry: 설정값이 담긴 인스턴스
+    :param config_registry: 설정값이 담긴 인스턴스 ConfigRegistry
     :return: AblyOrderHistoryScrapingConfig 인스턴스
     """
 

@@ -14,14 +14,14 @@ from core.common.bootstrap import run_bootstrap
 from domain.platform.platform import Platform
 from factory.bootstrap.config.local import LOCAL_BOOTSTRAP_CONFIG
 from factory.process.hiding.review_hiding_builder import build_vreview_review_hiding_config
-from factory.config.registry.local import build_local_config_registry
+from factory.config.registry.local import build_local_ini_config_registry
 from process.auxiliary.vreview.review_hiding.review_hiding import review_hiding
 
 
 def main():
     # environment (local) setting
     run_bootstrap(LOCAL_BOOTSTRAP_CONFIG)
-    local_config_registry = build_local_config_registry()
+    local_config_registry = build_local_ini_config_registry()
 
     # execution
     review_hiding(

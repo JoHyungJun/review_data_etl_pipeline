@@ -1,31 +1,22 @@
 """
-base_config_adapter.py
-----------------------
+ini_config_adapter.py
+---------------------
 
-외부 파일에 작성된 설정값 파싱을 위한 추상 클래스 모듈
-
-외부 설정 파일 (INI, Excel 등) 로부터 설정 데이터를 load 하여
-프로젝트 설정값 관리 표준 구조 (Dict[str, Section]) 로 변환하기 위한 추상화 인터페이스를 제공
-
-주의 사항
-- 해당 프로젝트는 비즈니스 로직에 직접 영향을 끼치는, 외부 파일에서 명시되는 설정값에 대해
-  Section-based dict 구조 (str: Section: Option - OptionValue) 를 사용하고 있으며,
-
-  따라서 외부 파일에 접근하여 설정값을 가져오는 클래스는
-  반드시 해당 클래스를 상속받고 규격에 맞게 dict 를 반환하여 ConfigRegistry 를 구성해야 함
+ini 형태의 외부 설정값 파일로부터 데이터를 추출하여
+dict[str, Section] 구조로 반환하는 클래스 모듈
 """
 
 
 import configparser
 from pathlib import Path
-from typing import Dict, Union, Optional
+from typing import Union, Optional
 
-from core.config.adapter.base_config_adapter import BaseConfigAdapter
+from core.base.adapter.base_section_based_config_adapter import BaseSectionBasedConfigAdapter
 from core.config.model.config_base_section_option import Section, Option
 from util.logging_util import logging_error_event
 
 
-class IniConfigAdapter(BaseConfigAdapter):
+class IniConfigAdapter(BaseSectionBasedConfigAdapter):
 
     @classmethod
     def _load_ini_config_to_dict(cls, ini_path: Union[Path, str]) -> Optional[dict]:
@@ -77,7 +68,7 @@ class IniConfigAdapter(BaseConfigAdapter):
             raise
 
     @classmethod
-    def _parse_ini_dict_to_schema_format(cls, ini_dict: dict) -> Dict[str, Section]:
+    def _parse_ini_dict_to_schema_format(cls, ini_dict: dict) -> dict[str, Section]:
         """
         INI dict 데이터를 Section-based configuration (Section/Option) 구조 dict 로 변환 및 반환
 
@@ -85,7 +76,7 @@ class IniConfigAdapter(BaseConfigAdapter):
         :return: 파싱된 Section-based configuration 구조의 dict
         """
 
-        schema: Dict[str, Section] = {}
+        schema: dict[str, Section] = {}
 
         for section_name, options_dict in ini_dict.items():
             section = Section(section_name)
@@ -104,15 +95,15 @@ class IniConfigAdapter(BaseConfigAdapter):
         return schema
 
     @classmethod
-    def load_to_section_based_dict(cls, file_path: Union[Path, str]) -> Dict[str, Section]:
+    def load_to_section_based_dict(cls, file_path: Union[Path, str]) -> dict[str, Section]:
         """
         ini 포맷으로 저장되어 있는 외부 파일에 작성된 설정값 load 및
         Section-based 구조의 dict 으로 반환
 
         ini 외부 파일은 반드시 해당 메서드의 파싱 로직 포맷대로 작성되어야 함
 
-        :param file_path: 파싱 대상 ini 외부 설정 파일 경로
-        :return: 파싱된 Section 명이 key 가 되는 Dict[str, Section]
+        :param file_path: 파싱 대상 ini 외부 설정 파일 경로 Union[Path, str]
+        :return: 파싱된 Section 명이 key 가 되는 dict[str, Section]
         """
 
         file_path = Path(file_path)
