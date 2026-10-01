@@ -11,6 +11,7 @@ import logging
 from core.base.pipeline.base_process_pipeline import BaseProcessPipeline
 from domain.export.export import Export
 from entry.environment import Environment
+from error.api import ExternalApiError
 from error.config import ConfigNotAvailableError
 from factory.config.registry.local import build_local_ini_config_registry
 from factory.pipeline.pipeline_builder import export_pipeline_builder
@@ -53,3 +54,9 @@ def run_pipelines(
                 f"Some values are not defined in config registry - {str(e)}"
             )
             continue
+
+        except ExternalApiError as e:
+            logging.warning(
+                f"[SKIP] platform={pipeline.get_platform().get_platform_eng_name()}: "
+                f"External API failed - {str(e)}"
+            )
