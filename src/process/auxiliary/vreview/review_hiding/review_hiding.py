@@ -22,9 +22,9 @@ from util.logging_util import run_with_logging
 
 
 @run_with_logging(
-    lambda *args, **kwargs: (
-        {"platform": kwargs["platform"].get_platform_eng_name()}
-        if kwargs.get("platform") is not None
+    lambda platform, **_: (
+        {"platform": platform.get_platform_eng_name()}
+        if platform is not None
         else {}
     )
 )
@@ -37,7 +37,6 @@ def review_hiding(
     VReview 에 등록된 리뷰 숨김 처리 관련 중심부
 
     :param platform: 숨김 대상 데이터의 플랫폼 정보 Optional[Platform]
-                     (로그 처리를 위한 인자이며, 반드시 keyword argument 방식으로 인자를 넘겨야 함)
     :param hiding_config: VReview 리뷰 숨김 관련 설정값을 가진 인스턴스
     :param target_review_ids: 숨김 대상 리뷰 id list[int]
     :return: 없음

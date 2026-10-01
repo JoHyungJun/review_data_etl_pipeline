@@ -37,10 +37,10 @@ class OptionMeta:
     - False / O or X: Optional 값이며, 기본값 사용 여부에 따라 반환 값이 달라짐
 
     주의 사항
-    스키마 코드 혹은 YAML 에 OptionMeta 없이 Option 을 추가했을 경우, 기본 OptionMeta 가 해당 Option 에 부여되는데,
-    기본 OptionMeta 인스턴스의 경우 생성자 파라미터가 is_required=True, default_value=None 으로 부여됨
-    이 경우 비정상적인 경로로의 변수 생성을 의미하여, 내부 로직 상 해당 Option 의 value 을 반환하려 했을 때 에러를 내게 되므로,
-    Option 추가 시 반드시 OptionMeta 설정을 권고
+    -   스키마 코드 혹은 YAML 에 OptionMeta 없이 Option 을 추가했을 경우, 기본 OptionMeta 가 해당 Option 에 부여되는데,
+        기본 OptionMeta 인스턴스의 경우 생성자 파라미터가 is_required=True, default_value=None 으로 부여됨
+        이 경우 비정상적인 경로로의 변수 생성을 의미하여, 내부 로직 상 해당 Option 의 value 을 반환하려 했을 때 에러를 내게 되므로,
+        Option 추가 시 반드시 OptionMeta 설정을 권고
     """
 
     def __init__(
@@ -125,6 +125,9 @@ class Option:
 
         유효값 반환 로직 규칙은 OptionMeta 의 is_required/default_value 규칙을 따르되,
         단, 파라미터의 use_default_value 가 is_required 보다 default_value 사용 여부 강제력에 우선 순위를 가짐
+
+        주의 사항
+        - Section/Option 에 대한 key 가 전부 존재하되, 해당 값이 없을 경우엔 ConfigNotAvailableError 를 발생시킴
 
         :param use_default_value: 기본값 사용 여부
         :return: 검증된 유효 value Optional[Any]

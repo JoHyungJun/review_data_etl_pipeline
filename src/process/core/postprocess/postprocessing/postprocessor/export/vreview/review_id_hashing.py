@@ -31,9 +31,9 @@ from util.logging_util import run_with_logging
 
 
 @run_with_logging(
-    lambda *args, **kwargs: (
-        {"platform": kwargs["platform"].get_platform_eng_name()}
-        if kwargs.get("platform") is not None
+    lambda platform, **_: (
+        {"platform": platform.get_platform_eng_name()}
+        if platform is not None
         else {}
     )
 )
@@ -60,7 +60,6 @@ def review_id_hashing(
     - 로직에 사용되는 필수 컬럼이 공백 혹은 None/NaN/Null 등 invalid 한 데이터일 경우, 해당 레코드는 제거됨
 
     :param platform: 리뷰 id 해싱 대상 데이터의 플랫폼 정보 Optional[Platform]
-                     (로그 처리를 위한 인자이며, 반드시 keyword argument 방식으로 인자를 넘겨야 함)
     :param df: 보정 대상 pandas.DataFrame
     :param review_id_column: 보정 대상 df 의 리뷰 id 관련 컬럼명 str
     :param review_created_date_column: 보정 대상 df 의 리뷰 작성 날짜 관련 컬럼명 str

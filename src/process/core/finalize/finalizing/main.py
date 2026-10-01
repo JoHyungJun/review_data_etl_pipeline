@@ -20,7 +20,7 @@ from domain.export.vreview.config.export_config import VReviewExportConfig
 from domain.export.vreview.schema.export.export_attribute_schema import VReviewExportAttributeSchema
 from domain.platform.platform import Platform
 from factory.bootstrap.config.local import LOCAL_BOOTSTRAP_CONFIG
-from factory.config.registry.local import build_local_config_registry
+from factory.config.registry.local import build_local_ini_config_registry
 from factory.path.local import build_local_shopping_mall_platform_data_directory_path
 from factory.process.scraping.review_scraping_builder import build_ably_review_scraping_config
 from process.core.finalize.finalizing.finalizing import finalizing
@@ -30,7 +30,7 @@ from util.path_util import get_or_create_date_period_directory
 def main():
     # environment (local) setting
     run_bootstrap(LOCAL_BOOTSTRAP_CONFIG)
-    local_config_registry = build_local_config_registry()
+    local_config_registry = build_local_ini_config_registry()
     excel_storage = ExcelStorage()
 
     # target export (vreview) setting

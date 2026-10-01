@@ -7,7 +7,7 @@ A-bly 파이프라인 전체 실행에 필요한 관련 속성 모음 클래스 
 
 
 from dataclasses import dataclass
-from typing import ClassVar, Type
+from typing import ClassVar, Type, Optional
 
 from core.base.domain.export.base_export_config import BaseExportConfig
 from core.base.pipeline.base_process_pipeline_spec import BaseProcessPipelineSpec
@@ -30,6 +30,7 @@ from util.runtime_environment_util import get_recommended_workers_count
 class AblyProcessPipelineSpec(BaseProcessPipelineSpec):
 
     # environment
+    shopping_mall_name: Optional[str]
     platform: ClassVar[Platform] = Platform.ABLY
     config_registry: ConfigRegistry
 

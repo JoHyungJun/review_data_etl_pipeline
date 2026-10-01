@@ -8,6 +8,7 @@ runtime_environment_util.py
 
 import gc
 import logging
+import os
 from multiprocessing import cpu_count
 from typing import Optional
 
@@ -459,3 +460,24 @@ def estimate_max_token_count_per_batch(
     )
 
     return estimated_token_count
+
+
+def resolve_value_from_environment_variables(key: str) -> str:
+    """
+    실행 환경에서 관리되는 환경변수에서 key 에 해당하는 값을 반환
+
+    환경변수에서 관리되는 value 는 원칙적으로 str 을 반환하며,
+    호출부에서 해당 value 를 다른 데이터 타입으로 변환하여 활용 가능
+
+    :param key: 환경변수 추출 대상 데이터의 key str
+    :return: 환경변수에서 추출한 대상 데이터 value str
+    """
+
+    environment_value = os.getenv(key)
+
+    if environment_value is None:
+        raise RuntimeError(
+            f"{key} 변수가 환경변수 내에 설정되지 않아 프로젝트 실행에 실패하였습니다. 외부 환경변수를 확인해주세요."
+        )
+
+    return environment_value

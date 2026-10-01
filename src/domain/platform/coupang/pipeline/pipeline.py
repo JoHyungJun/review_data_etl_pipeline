@@ -9,12 +9,12 @@ Coupang review scraping 및 VReview finalizing 파이프라인 설정 모듈
 """
 
 
+from pathlib import Path
+
 from core.base.dataset.dataset_spec import DatasetSpec
-from core.base.pipeline.base_required_spec_process_pipeline import BaseRequiredSpecProcessPipeline
-from core.config.model.config_registry import ConfigRegistry
+from core.base.pipeline.base_process_pipeline import BaseProcessPipeline
 from domain.platform.coupang.pipeline.model.coupang_process_pipeline_spec import CoupangProcessPipelineSpec
 from domain.platform.platform import Platform
-from factory.pipeline.spec.local import build_local_coupang_pipeline_spec
 from process.core.finalize.finalizing.finalizing import finalizing
 from process.core.ingest.review_scraping.review_scraping import review_scraping
 from process.core.postprocess.postprocessing.postprocessor.common.product_option_remapping import \
@@ -24,9 +24,10 @@ from process.core.postprocess.postprocessing.postprocessor.common.sentiment.sent
 from process.core.postprocess.postprocessing.postprocessor.export.vreview.review_id_hashing import review_id_hashing
 from process.core.preprocess.preprocessing.preprocessing import preprocessing
 from util.column_util import build_indexed_column_name
+from util.logging_util import run_with_logging
 
 
-class CoupangToVReviewProcessPipeline(BaseRequiredSpecProcessPipeline):
+class CoupangToVReviewProcessPipeline(BaseProcessPipeline):
     """
     Coupang review scraping 및 VReview finalizing 파이프라인 설정 클래스
 
@@ -42,6 +43,9 @@ class CoupangToVReviewProcessPipeline(BaseRequiredSpecProcessPipeline):
     @classmethod
     def get_platform(cls) -> Platform:
         return Platform.COUPANG
+
+    def get_final_output_path(self) -> Path:
+        return self._pipeline_spec.finalizing_success_save_spec.get_full_path()
 
     def run_ingest(self) -> None:
         review_scraping(
@@ -126,17 +130,14 @@ class CoupangToVReviewProcessPipeline(BaseRequiredSpecProcessPipeline):
             config_registry=self._pipeline_spec.config_registry,
         )
 
+    @run_with_logging(
+        lambda self: {
+            "shopping_mall_name": self._pipeline_spec.shopping_mall_name,
+            "export_id": self._pipeline_spec.export_config.get_export_eng_name(),
+        }
+    )
     def run_pipeline(self) -> None:
         self.run_ingest()
         self.run_preprocess()
         self.run_postprocess()
         self.run_finalize()
-
-    @classmethod
-    def from_config_registry(
-            cls,
-            config_registry: ConfigRegistry,
-    ) -> BaseRequiredSpecProcessPipeline:
-        return CoupangToVReviewProcessPipeline(
-            build_local_coupang_pipeline_spec(config_registry)
-        )

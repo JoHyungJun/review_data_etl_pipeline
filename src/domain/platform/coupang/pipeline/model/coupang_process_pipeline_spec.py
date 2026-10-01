@@ -7,7 +7,7 @@ Coupang 파이프라인 전체 실행에 필요한 관련 속성 모음 클래�
 
 
 from dataclasses import dataclass
-from typing import ClassVar, Type
+from typing import ClassVar, Type, Optional
 
 from core.base.domain.export.base_export_config import BaseExportConfig
 from core.base.pipeline.base_process_pipeline_spec import BaseProcessPipelineSpec
@@ -26,6 +26,7 @@ from domain.platform.platform import Platform
 class CoupangProcessPipelineSpec(BaseProcessPipelineSpec):
 
     # environment
+    shopping_mall_name: Optional[str]
     platform: ClassVar[Platform] = Platform.COUPANG
     config_registry: ConfigRegistry
 

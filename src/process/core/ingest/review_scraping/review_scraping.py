@@ -28,9 +28,9 @@ from util.logging_util import run_with_logging, logging_file_event
 
 
 @run_with_logging(
-    lambda *args, **kwargs: (
-        {"platform": kwargs["platform"].get_platform_eng_name()}
-        if kwargs.get("platform") is not None
+    lambda platform, **_: (
+        {"platform": platform.get_platform_eng_name()}
+        if platform is not None
         else {}
     )
 )
@@ -52,7 +52,6 @@ def review_scraping(
     - storage, save_spec 기반 저장
 
     :param platform: 리뷰 수집 대상 데이터의 플랫폼 정보 Optional[Platform]
-                     (로그 처리를 위한 인자이며, 반드시 keyword argument 방식으로 인자를 넘겨야 함)
     :param scraping_config: 플랫폼별 스크랩 관련 설정값을 가진 BaseScrapingConfig
     :param storage: 저장소 환경별 save/load 로직을 가진 BaseStorage
     :param save_spec: 저장소 환경별 save 관련 세부 설정값을 가진 BaseStorageSaveSpec

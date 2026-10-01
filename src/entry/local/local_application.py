@@ -4,16 +4,13 @@ local_application.py
 
 로컬 애플리케이션 실행 관련 클래스 모듈
 
-외부 설정값 기반, 로컬 환경 필수 세팅 검증 및 bootstrap 수행 후 플랫폼별 파이프라인을 조립하고 실행
+로컬 환경 필수 세팅 검증 및 bootstrap 수행 후 요청된 프로세스 실행
 
 주의 사항
-- 현재 로컬 환경의 Application 은 내부 규칙에 의해 단일 실행 방식이 선택 및 실행되며,
-  이후 추가적인 기능 확장 시 현재 모듈이 그에 따른 분기의 책임을 가지고,
-  현재 모듈이 호출하는 외부 메서드가 전략에 따라 파이프라인 객체를 조립하여 전달
+- 현재 로컬 환경의 Application 은 내부 규칙에 의해 단일 실행 방식 (파이프라인 전체 실행) 이 선택 및 실행되며,
+  이후 추가적인 기능 확장 시 현재 모듈이 그에 따른 분기의 책임을 담당하여 구현되어야 함
 """
 
-
-import logging
 
 from config.constant.common.name_constants import (
     SRC_DIRECTORY_NAME,
@@ -23,15 +20,11 @@ from config.constant.common.name_constants import (
     LOGS_DIRECTORY_NAME,
 )
 from config.constant.common.path_constants import BASE_DIRECTORY_PATH
-from core.base.pipeline.base_process_pipeline import BaseProcessPipeline
 from core.common.bootstrap import run_bootstrap
 from core.config.constant.schema_constants import COMMON
-from domain.export.export import Export
-from entry.orchestration.export_pipeline_applier import export_pipeline_applier
-from error.config import ConfigNotAvailableError
+from entry.local.config.ini.runner.pipeline import run_pipelines
 from factory.bootstrap.config.local import LOCAL_BOOTSTRAP_CONFIG
-from factory.config.registry.local import build_local_config_registry
-from util.logging_util import logging_error_event
+from factory.config.registry.local import build_local_ini_config_registry
 
 
 class LocalApplication:
@@ -92,37 +85,21 @@ class LocalApplication:
 
         # bootstrap
         run_bootstrap(self.bootstrap_config)
-        config_registry = build_local_config_registry()
 
-        # run
+        # extract metadata
+        config_registry = build_local_ini_config_registry()
         export_id = config_registry.get_value(
             section_key=COMMON.SECTION_KEY,
             option_name=COMMON.EXPORT_ID,
         )
 
-        pipelines: list[BaseProcessPipeline] = export_pipeline_applier(
-            export=Export.from_id(export_id),
-            config_registry=config_registry,
+        shopping_mall_name = config_registry.get_value(
+            section_key=COMMON.SECTION_KEY,
+            option_name=COMMON.SHOPPING_MALL_NAME,
         )
 
-        for pipeline in pipelines:
-            try:
-                pipeline.run_pipeline()
-
-            except ConfigNotAvailableError as e:
-                logging.warning(
-                    f"[SKIP] platform={pipeline.get_platform().get_platform_eng_name()}: "
-                    f"Some values are not defined in config registry - {str(e)}"
-                )
-                continue
-
-            except Exception as e:
-                logging_error_event(
-                    exception_instance=e,
-                    log_metadata={
-                        "platform": pipeline.get_platform().get_platform_eng_name(),
-                    },
-                    log_message="While running local application",
-                    log_message_detail=str(e),
-                )
-                continue
+        # run
+        run_pipelines(
+            shopping_mall_name=shopping_mall_name,
+            export_id=export_id,
+        )

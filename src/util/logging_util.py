@@ -7,6 +7,7 @@ logging_util.py
 
 
 import functools
+import inspect
 import logging
 import time
 import uuid
@@ -37,9 +38,10 @@ def run_with_logging(log_metadata: Union[dict, Callable] = None) -> Callable:
             func_full_name = f"{func.__module__}.{func.__qualname__}"
 
             # dict / callable 처리
+            bound_arguments = inspect.signature(func).bind(*args, **kwargs)
             metadata = None
             if callable(log_metadata):
-                metadata = log_metadata(*args, **kwargs)
+                metadata = log_metadata(**bound_arguments.arguments)
             elif isinstance(log_metadata, dict):
                 metadata = log_metadata
 
@@ -49,17 +51,17 @@ def run_with_logging(log_metadata: Union[dict, Callable] = None) -> Callable:
                 kv_pairs = [f"{k}={v}" for k, v in metadata.items()]
                 metadata_str = ", " + ", ".join(kv_pairs)
 
-            # 해당 프로세스에 부여할 job id 생성
-            job_id = str(uuid.uuid4())[:8]
+            # 로그에서의 동일 메서드 확인용 execution id 생성
+            execution_id = str(uuid.uuid4())[:8]
 
-            logging.info(f"[BEGIN] job_id={job_id}, process={func_full_name}{metadata_str}: Started")
+            logging.info(f"[BEGIN] execution_id={execution_id}, process={func_full_name}{metadata_str}: Started")
             start_time = time.time()
 
             # 프로세스 성공 여부에 따라 로그 분기 처리
             try:
                 result = func(*args, **kwargs)
                 elapsed = time.time() - start_time
-                logging.info(f"[SUCCESS] job_id={job_id}, process={func_full_name}{metadata_str}: "
+                logging.info(f"[SUCCESS] execution_id={execution_id}, process={func_full_name}{metadata_str}: "
                              f"Completed ({elapsed:.2f}s)")
                 return result
             except Exception as e:
@@ -69,7 +71,7 @@ def run_with_logging(log_metadata: Union[dict, Callable] = None) -> Callable:
                     log_level="exception",
                     exception_instance=e,
                     log_metadata={
-                        "job_id": job_id,
+                        "execution_id": execution_id,
                         "process": func_full_name, **(metadata or {})
                     },
                     log_message=f"Failed (elapsed={elapsed:.2f}s): {e}"

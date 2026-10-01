@@ -15,7 +15,7 @@ def build_vreview_file_uploading_config(config_registry: ConfigRegistry) -> Vrev
     """
     VReview 의 파일 업로드 API 관련 config 인스턴스인 VreviewFileUploadingConfig 를 반환
 
-    :param config_registry: 설정값이 담긴 인스턴스
+    :param config_registry: 설정값이 담긴 인스턴스 ConfigRegistry
     :return: VreviewFileUploadingConfig 인스턴스
     """
 

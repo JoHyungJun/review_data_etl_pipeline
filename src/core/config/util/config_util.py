@@ -229,7 +229,7 @@ def merge_schema_with_config(
             logging.info(f"[MERGE] process=merge_schema_with_config, target_section={config_section_key}: "
                          f"Found new section from config not in schema")
 
-            merged_schema_dict[config_section_key] = Section(config_section_key)
+            merged_schema_dict[config_section_key] = deepcopy(config_section_obj)
             continue
 
         # Section 객체인지 검증 후 options dict 가져오기

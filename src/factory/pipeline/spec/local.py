@@ -14,9 +14,12 @@ from config.constant.common.name_constants import (
     FINALIZING_SUCCESS_OUTPUT_XLSX_FILE_NAME,
     FINALIZING_FAILED_OUTPUT_XLSX_FILE_NAME,
     VREVIEW_ID_TO_PLATFORM_ID_MAPPING_XLSX_FILE_NAME,
-    VREVIEW_ID_TO_PRODUCT_OPTION_MAPPING_XLSX_FILE_NAME, VREVIEW_DIRECTORY_NAME, ABLY_DIRECTORY_NAME,
+    VREVIEW_ID_TO_PRODUCT_OPTION_MAPPING_XLSX_FILE_NAME,
+    VREVIEW_DIRECTORY_NAME,
+    ABLY_DIRECTORY_NAME,
     COUPANG_DIRECTORY_NAME,
 )
+from core.config.constant.schema_constants import COMMON
 from core.config.model.config_registry import ConfigRegistry
 from core.implementation.storage.excel.spec.excel_load_spec import ExcelLoadSpec
 from core.implementation.storage.excel.spec.excel_save_spec import ExcelSaveSpec
@@ -39,7 +42,7 @@ from factory.process.scraping.review_scraping_builder import (
 from util.path_util import get_or_create_date_period_directory
 
 
-def build_local_ably_pipeline_spec(config_registry: ConfigRegistry) -> AblyProcessPipelineSpec:
+def build_local_ably_to_vreview_process_pipeline_spec(config_registry: ConfigRegistry) -> AblyProcessPipelineSpec:
     """
     로컬 환경용 AblyProcessPipelineSpec 인스턴스의 빌더 메서드
 
@@ -110,6 +113,10 @@ def build_local_ably_pipeline_spec(config_registry: ConfigRegistry) -> AblyProce
     )
 
     return AblyProcessPipelineSpec(
+        shopping_mall_name=config_registry.get_value(
+            section_key=COMMON.SECTION_KEY,
+            option_name=COMMON.SHOPPING_MALL_NAME,
+        ),
         config_registry=config_registry,
 
         storage=storage,
@@ -195,7 +202,7 @@ def build_local_ably_pipeline_spec(config_registry: ConfigRegistry) -> AblyProce
     )
 
 
-def build_local_coupang_pipeline_spec(config_registry: ConfigRegistry) -> CoupangProcessPipelineSpec:
+def build_local_coupang_to_vreview_process_pipeline_spec(config_registry: ConfigRegistry) -> CoupangProcessPipelineSpec:
     """
     로컬 환경용 CoupangProcessPipelineSpec 인스턴스의 빌더 메서드
 
@@ -260,6 +267,10 @@ def build_local_coupang_pipeline_spec(config_registry: ConfigRegistry) -> Coupan
     )
 
     return CoupangProcessPipelineSpec(
+        shopping_mall_name=config_registry.get_value(
+            section_key=COMMON.SECTION_KEY,
+            option_name=COMMON.SHOPPING_MALL_NAME,
+        ),
         config_registry=config_registry,
 
         storage=storage,

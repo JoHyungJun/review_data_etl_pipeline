@@ -41,9 +41,9 @@ from util.logging_util import run_with_logging
 
 
 @run_with_logging(
-    lambda *args, **kwargs: (
-        {"platform": kwargs["platform"].get_platform_eng_name()}
-        if kwargs.get("platform") is not None
+    lambda platform, **_: (
+        {"platform": platform.get_platform_eng_name()}
+        if platform is not None
         else {}
     )
 )
@@ -72,7 +72,6 @@ def product_option_remapping(
     - 컬럼명은 기존 df 에 정의된 컬럼명으로 정의
 
     :param platform: 상품명/옵션명 정보 보정 대상 데이터의 플랫폼 정보 Optional[Platform]
-                     (로그 처리를 위한 인자이며, 반드시 keyword argument 방식으로 인자를 넘겨야 함)
     :param df: 보정 대상 pandas.DataFrame
     :param storage: 저장소 환경별 save/load 로직을 가진 BaseStorage
     :param product_option_mapping_dataset_spec: {리뷰 플랫폼 기준 상품 id - export 플랫폼별 상품 id} 정보 관련

@@ -17,7 +17,7 @@ def build_ably_review_scraping_config(config_registry: ConfigRegistry) -> AblyRe
     """
     A-bly 의 리뷰 scraping API 관련 config 인스턴스인 AblyReviewScrapingConfig 를 반환
 
-    :param config_registry: 설정값이 담긴 인스턴스
+    :param config_registry: 설정값이 담긴 인스턴스 ConfigRegistry
     :return: AblyReviewScrapingConfig 인스턴스
     """
 
@@ -54,7 +54,7 @@ def build_coupang_review_scraping_config(config_registry: ConfigRegistry) -> Cou
     """
     Coupang 의 리뷰 scraping API 관련 config 인스턴스인 CoupangReviewScrapingConfig 를 반환
 
-    :param config_registry: 설정값이 담긴 인스턴스
+    :param config_registry: 설정값이 담긴 인스턴스 ConfigRegistry
     :return: CoupangReviewScrapingConfig 인스턴스
     """
 
@@ -83,7 +83,7 @@ def build_vreview_review_scraping_config(config_registry: ConfigRegistry) -> VRe
     """
     VReview 의 리뷰 scraping API 관련 config 인스턴스인 VReviewReviewScrapingConfig 를 반환
 
-    :param config_registry: 설정값이 담긴 인스턴스
+    :param config_registry: 설정값이 담긴 인스턴스 ConfigRegistry
     :return: VReviewReviewScrapingConfig 인스턴스
     """
 

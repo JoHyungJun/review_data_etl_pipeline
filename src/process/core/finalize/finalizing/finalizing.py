@@ -12,9 +12,9 @@ from util.logging_util import run_with_logging, logging_error_event
 
 
 @run_with_logging(
-    lambda *args, **kwargs: (
-        {"platform": kwargs["platform"].get_platform_eng_name()}
-        if kwargs.get("platform") is not None
+    lambda platform, **_: (
+        {"platform": platform.get_platform_eng_name()}
+        if platform is not None
         else {}
     )
 )
@@ -35,7 +35,6 @@ def finalizing(
     비즈니스 로직 정의 및 데이터 저장은 개별 export 객체 내부 정의를 따름
 
     :param platform: finalize 대상 데이터의 플랫폼 정보 Optional[Platform]
-                     (로그 처리를 위한 인자이며, 반드시 keyword argument 방식으로 인자를 넘겨야 함)
     :param export_config: finalize 대상 export 정보를 가진 BaseExportConfig
     :param storage: 저장소 환경별 save/load 로직을 가진 BaseStorage
     :param load_spec: 저장소 환경별 finalize 대상 데이터 load 관련 세부 정보 설정값을 가진 BaseStorageLoadSpec
