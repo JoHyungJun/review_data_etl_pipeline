@@ -10,8 +10,12 @@ finalizing 의 실행부
 """
 
 
-from config.constant.common.name_constants import POSTPROCESSING_OUTPUT_XLSX_FILE_NAME, \
-    FINALIZING_SUCCESS_OUTPUT_XLSX_FILE_NAME, FINALIZING_FAILED_OUTPUT_XLSX_FILE_NAME, ABLY_DIRECTORY_NAME
+from config.constant.common.name_constants import (
+    POSTPROCESSING_OUTPUT_XLSX_FILE_NAME,
+    FINALIZING_SUCCESS_OUTPUT_XLSX_FILE_NAME,
+    FINALIZING_FAILED_OUTPUT_XLSX_FILE_NAME,
+    ABLY_DIRECTORY_NAME,
+)
 from core.common.bootstrap import run_bootstrap
 from core.implementation.storage.excel.spec.excel_load_spec import ExcelLoadSpec
 from core.implementation.storage.excel.spec.excel_save_spec import ExcelSaveSpec
@@ -22,6 +26,7 @@ from domain.platform.platform import Platform
 from factory.bootstrap.config.local import LOCAL_BOOTSTRAP_CONFIG
 from factory.config.registry.local import build_local_ini_config_registry
 from factory.path.local import build_local_shopping_mall_platform_data_directory_path
+from factory.pipeline.spec.local import LOCAL_PERIOD_DIRECTORY_NAME_DELIMITER
 from factory.process.scraping.review_scraping_builder import build_ably_review_scraping_config
 from process.core.finalize.finalizing.finalizing import finalizing
 from util.path_util import get_or_create_date_period_directory
@@ -43,6 +48,7 @@ def main():
     ably_date_output_directory_path = get_or_create_date_period_directory(
         start_date=ably_review_scraping_config.get_scraping_start_date(),
         end_date=ably_review_scraping_config.get_scraping_end_date(),
+        delimiter=LOCAL_PERIOD_DIRECTORY_NAME_DELIMITER,
         base_path=build_local_shopping_mall_platform_data_directory_path(
             config_registry=local_config_registry,
             platform_name=ABLY_DIRECTORY_NAME,

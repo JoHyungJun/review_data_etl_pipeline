@@ -12,18 +12,19 @@ preprocessing 의 실행부
 
 from config.constant.common.name_constants import (
     REVIEW_SCRAPING_OUTPUT_XLSX_FILE_NAME,
-    VREVIEW_ID_TO_PLATFORM_ID_MAPPING_XLSX_FILE_NAME,
-    VREVIEW_ID_TO_PRODUCT_OPTION_MAPPING_XLSX_FILE_NAME,
+    VREVIEW_TO_PLATFORM_PRODUCT_ID_MAPPING_XLSX_FILE_NAME,
+    VREVIEW_TO_PLATFORM_PRODUCT_OPTION_MAPPING_XLSX_FILE_NAME,
     PREPROCESSING_OUTPUT_XLSX_FILE_NAME,
-    ORDER_HISTORY_SCRAPING_OUTPUT_XLSX_FILE_NAME, VREVIEW_DIRECTORY_NAME, ABLY_DIRECTORY_NAME,
+    ORDER_HISTORY_SCRAPING_OUTPUT_XLSX_FILE_NAME,
+    VREVIEW_DIRECTORY_NAME,
+    ABLY_DIRECTORY_NAME,
 )
 from core.common.bootstrap import run_bootstrap
 from factory.bootstrap.config.local import LOCAL_BOOTSTRAP_CONFIG
 from factory.config.registry.local import build_local_ini_config_registry
 from factory.path.local import build_local_shopping_mall_platform_data_directory_path
-from factory.process.scraping.review_scraping_builder import (
-    build_ably_review_scraping_config,
-)
+from factory.pipeline.spec.local import LOCAL_PERIOD_DIRECTORY_NAME_DELIMITER
+from factory.process.scraping.review_scraping_builder import build_ably_review_scraping_config
 from core.base.dataset.dataset_spec import DatasetSpec
 from domain.export.vreview.config.export_config import VReviewExportConfig
 from domain.platform.ably.schema.id_mapping_attribute_schema import AblyVReviewProductIdMappingAttributeSchema
@@ -56,7 +57,7 @@ def main():
             config_registry=local_config_registry,
             platform_name=VREVIEW_DIRECTORY_NAME,
         ),
-        resource_name=VREVIEW_ID_TO_PRODUCT_OPTION_MAPPING_XLSX_FILE_NAME,
+        resource_name=VREVIEW_TO_PLATFORM_PRODUCT_OPTION_MAPPING_XLSX_FILE_NAME,
     )
 
     # source platform (ably) setting
@@ -69,6 +70,7 @@ def main():
     ably_date_output_directory_path = get_or_create_date_period_directory(
         start_date=ably_review_scraping_config.get_scraping_start_date(),
         end_date=ably_review_scraping_config.get_scraping_end_date(),
+        delimiter=LOCAL_PERIOD_DIRECTORY_NAME_DELIMITER,
         base_path=ably_data_directory_path,
     )
 
@@ -84,7 +86,7 @@ def main():
 
     ably_vreview_product_id_mapping_load_spec = ExcelLoadSpec(
         root_path=ably_data_directory_path,
-        resource_name=VREVIEW_ID_TO_PLATFORM_ID_MAPPING_XLSX_FILE_NAME,
+        resource_name=VREVIEW_TO_PLATFORM_PRODUCT_ID_MAPPING_XLSX_FILE_NAME,
     )
 
     ably_save_spec = ExcelSaveSpec(

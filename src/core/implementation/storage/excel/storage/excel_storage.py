@@ -30,9 +30,13 @@ class ExcelStorage(BaseStorage):
     """
 
     @run_with_logging()
-    def save(self, save_spec: ExcelSaveSpec, df: pd.DataFrame) -> None:
+    def save(
+            self,
+            save_spec: ExcelSaveSpec,
+            df: pd.DataFrame
+    ) -> None:
         """
-        파라미터로 전달된 데이터를 spec 설정에 따라 Excel 에 save
+        파라미터로 전달된 dataframe 데이터를 spec 설정에 따라 Excel 에 save
 
         :param save_spec: save 관련 세부 설정 정보
         :param df: save 대상 pandas.DataFrame
@@ -99,6 +103,7 @@ class ExcelStorage(BaseStorage):
                     )
 
         new_df = df.copy()
+        old_df = old_df.copy()
         merged_df = pd.DataFrame()
 
         # 개별 df 에 pk 검증
@@ -116,9 +121,6 @@ class ExcelStorage(BaseStorage):
         if old_df is None or old_df.empty:
             merged_df = new_df
         else:
-            old_df = old_df.copy()
-            new_df = new_df.copy()
-
             old_df[pk] = old_df[pk].astype("string")
             new_df[pk] = new_df[pk].astype("string")
 
@@ -127,13 +129,20 @@ class ExcelStorage(BaseStorage):
             # overwrite true - 같은 pk 데이터의 경우 새로운 데이터가 우선 순위 (새로운 데이터로 덮어씀)
             if save_spec.overwrite:
                 merged_df = pd.concat(
-                    [old_df[~old_df[pk].isin(new_df[pk])], new_df],
+                [
+                        old_df[~old_df[pk].isin(new_df[pk])],
+                        new_df
+                    ],
                     ignore_index=True,
                 )
             # overwrite false - 같은 pk 데이터의 경우 기존 데이터가 우선 순위 (기존 데이터로 덮어씀)
             else:
                 merged_df = pd.concat(
-                    [old_df, new_df[~new_df[pk].isin(old_df[pk])]],
+                [
+                        old_df,
+                        new_df[~new_df[pk].isin(old_df[pk])]
+                    ],
+                    ignore_index=True,
                 )
 
             if duplicated_pks:
@@ -160,7 +169,10 @@ class ExcelStorage(BaseStorage):
         )
 
     @run_with_logging()
-    def load(self, load_spec: ExcelLoadSpec) -> pd.DataFrame:
+    def load(
+            self,
+            load_spec: ExcelLoadSpec
+    ) -> pd.DataFrame:
         """
         spec 설정에 따른 대상 데이터를 Excel 에서 추출 후 반환
 
@@ -208,12 +220,24 @@ class ExcelStorage(BaseStorage):
             # 개별 시트 쿼리 적용 및 load
             for sheet in target_sheets:
                 try:
-                    load_query = DuckDBQueryBuilder.build_excel_load_query(
-                        file_path=full_path,
-                        sheet_name=sheet,
+                    from_path = full_path.as_posix()
+
+                    # duck db 의 타입 추론에서, 빈 셀을 DOUBLE 이 아닌 VARCHAR 로 추론하게끔 하기 위한 empty_as_varchar 설정 추가
+                    from_clause = (
+                        f"FROM read_xlsx("
+                        f"'{from_path}', "
+                        f"sheet='{sheet}', "
+                        f"empty_as_varchar=true"
+                        f")"
+                    )
+
+                    load_query = DuckDBQueryBuilder.build_load_query(
+                        from_clause=from_clause,
                         query_spec=load_spec.load_query_spec,
                     )
+
                     sheet_df = duckdb_connect.execute(load_query).df()
+
                 except Exception as e:
                     logging_error_event(
                         exception_instance=e,
@@ -254,10 +278,14 @@ class ExcelStorage(BaseStorage):
             return pd.concat(rows, ignore_index=True)
 
 
-    def exists(self, base_spec: BaseStorageSpec) -> bool:
+    def exists(
+            self,
+            base_spec: BaseStorageSpec
+    ) -> bool:
         """
         spec 에 정의된 경로의 파일 존재 여부
 
+        :param base_spec: 대상 저장소의 정보 BaseStorageSpec
         :return: spec 에 정의된 경로의 파일 존재 여부 bool
         """
 

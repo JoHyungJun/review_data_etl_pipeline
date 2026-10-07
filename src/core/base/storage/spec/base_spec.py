@@ -26,7 +26,7 @@ class BaseStorageSpec(ABC):
     # 최소 단위 저장소 식별자 (ex. Excel -> 파일명 / DB -> 테이블명)
     resource_name: str
 
-    def get_full_path(self) -> Path:
+    def get_full_path(self) -> Union[Path, str]:
         """
         해당 spec 인스턴스가 관리하는 데이터 단위 (저장소) 의 전체 경로를 반환
 

@@ -4,9 +4,11 @@ duckdb_builder.py
 
 duck db 환경용 쿼리문 빌더 클래스 설정 모듈
 """
+
+
 import logging
-from pathlib import Path
-from typing import Union, Optional, Literal, OrderedDict, Sized
+from collections import OrderedDict
+from typing import Optional, Literal, Sized
 
 from core.base.query.spec.base_load_spec import BaseLoadQuerySpec
 from core.base.schema.attribute.util.attribute_schema_util import validate_column_name
@@ -56,33 +58,34 @@ class DuckDBQueryBuilder:
         return list(dict.fromkeys(filtered))
 
     @staticmethod
-    def build_excel_load_query(
-            file_path: Union[Path, str],
-            sheet_name: str,
+    def build_load_query(
+            from_clause: str,
             query_spec: Optional[BaseLoadQuerySpec],
     ) -> str:
         """
-        경로 정보를 받아 전체 Excel 데이터를 load 할 쿼리를 반환
+        쿼리 정보를 받아 Storage 저장소 환경별 데이터를 load 할 쿼리를 반환
 
-        :param file_path: Excel 경로 Union[Path, str]
-        :param sheet_name: 대상 시트명 str
+        주의 사항
+        - 파라미터로 전달되는 from clauses 의 경우 duck db 의 쿼리 형태에 맞는 FROM 절이 전달되어야 함
+
+        :param from_clause: Storage 저장소 환경별 상이한 경로 및 정보에 대해 서술한 duck db 의 from 절 str
         :param query_spec: load 관련 쿼리 정보 Optional[BaseLoadQuerySpec]
         :return: load 전체 쿼리문 str
         """
 
-        file_path_for_excel = str(file_path).replace("\\", "/")
+        # FROM 절 전처리
+        from_clause = from_clause.strip()
 
-        # duck db 의 타입 추론에서, 빈 셀을 DOUBLE 이 아닌 VARCHAR 로 추론하게끔 하기 위한 empty_as_varchar 설정 추가
-        from_clauses = (
-            f" FROM read_xlsx("
-            f"'{file_path_for_excel}', "
-            f"sheet='{sheet_name}', "
-            f"empty_as_varchar=true"
-            f")"
-        )
+        if not from_clause.upper().startswith("FROM "):
+            raise ValueError(
+                f"{DuckDBQueryBuilder.__name__} 의 build_load_query() 파라미터로 적절하지 않은 FROM 구문이 전달되었습니다. "
+                f"코드를 확인해주세요."
+            )
+
+        from_clause = " " + from_clause
 
         if query_spec is None:
-            return f"SELECT *{from_clauses}"
+            return f"SELECT *{from_clause}"
 
         if isinstance(query_spec.select, list):
             valid_columns = DuckDBQueryBuilder._filtering_valid_select_columns(query_spec.select)
@@ -102,7 +105,7 @@ class DuckDBQueryBuilder:
 
         select_clauses = f"SELECT {select_clauses}"
 
-        full_clauses = select_clauses + from_clauses
+        full_clauses = select_clauses + from_clause
 
         if query_spec.where:
             full_clauses += f" WHERE {query_spec.where.strip()}"

@@ -17,14 +17,16 @@ def get_validated_date_by_str(
     """
     검증 대상 날짜 문자열을 파라미터 포맷 (validate_format, 기본값: "yyyy-MM-dd") 으로 검증 후 반환
 
+    주의 사항
+    - 해당 메서드의 반환 값은 입력 날짜 str 에 zero leading 을 적용한 포맷 날짜 str
+
     :param date_str: 날짜 검증 대상 str
     :param validate_format: 날짜 검증 포맷 (기본값: "yyyy-MM-dd") str
     :return: 포맷으로 검증된 날짜 str
     """
     
     try:
-        datetime.strptime(date_str, validate_format)
-        return date_str
+        return datetime.strptime(date_str, validate_format).date().strftime(validate_format)
     except ValueError:
         raise ValueError(f"날짜 검증 대상 변수의 포맷이 잘못되었습니다. : {date_str} ({validate_format} 형식에 맞춰주세요)")
 
@@ -36,14 +38,16 @@ def get_validated_time_by_str(
     """
     검증 대상 시간 문자열을 파라미터 포맷 (validate_format, 기본값: "HH:mm:ss") 으로 검증 후 반환
 
+    주의 사항
+    - 해당 메서드의 반환 값은 입력 날짜 str 에 zero leading 을 적용한 포맷 날짜 str
+
     :param time_str: 시간 검증 대상 str
     :param validate_format: 시간 검증 포맷 (기본값: "HH:mm:ss") str
     :return: 포맷으로 검증된 시간 str
     """
 
     try:
-        datetime.strptime(time_str, validate_format).time()
-        return time_str
+        return datetime.strptime(time_str, validate_format).time().strftime(validate_format)
     except ValueError:
         raise ValueError(f"시간 검증 대상 변수의 포맷이 잘못되었습니다. : {time_str} ({validate_format} 형식에 맞춰주세요)")
 
