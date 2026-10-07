@@ -120,7 +120,7 @@ class VReviewReviewScrapingConfig(BaseScrapingConfig):
         - None/파라미터 명시 없음: 인스턴스 생성 시 초기화 된 값 사용
         - True: 인스턴스 생성 시 초기화 된 값 사용 (None 과 동일)
         - False: 해당 query parameter 삭제
-        - int: 해당 값을 이용한 새로운 query parameter 반환 (인스턴스 내부 값 덮어 쓰기)
+        - int: 해당 값을 이용한 새로운 query parameter 반환 (인스턴스 내부 값 덮어쓰기)
 
         :param page: API 요청 페이지 번호
         :param start_date: API 요청 시작 날짜

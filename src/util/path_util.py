@@ -95,26 +95,33 @@ def get_or_create_directory(
     return directory_path
 
 
-def get_period_directory_name(start_date: str, end_date: str) -> str:
+def get_period_directory_name(
+        start_date: str,
+        end_date: str,
+        delimiter: str,
+) -> str:
     """
-    "시작 날짜 ~ 종료 날짜" 포맷의 디렉토리명 반환
+    "{시작 날짜}{구분자}{종료 날짜}" 포맷의 디렉토리명 반환
 
     스크래핑 데이터의 기간별 구분 시
     동일한 포맷의 이름을 개별 디렉토리에 부여하기 위해 활용
-    
-    파라미터의 start_date, end_date 는 "YYYY-MM-DD" 포맷 검증을 거침
+
+    주의 사항
+    - 파라미터의 start_date, end_date 는 "YYYY-MM-DD" 포맷 검증과 zero leading 포맷 변환이 이루어짐
 
     :param start_date: 시작 날짜 str
     :param end_date: 종료 날짜 str
-    :return: 'YYYY-MM-DD ~ YYYY-MM-DD' 포맷의 str
+    :param delimiter: 시작/종료 날짜 사이의 구분자 str
+    :return: '{YYYY-MM-DD}{구분자}{YYYY-MM-DD}' 포맷의 str
     """
 
-    return f"{get_validated_date_by_str(start_date)} ~ {get_validated_date_by_str(end_date)}"
+    return f"{get_validated_date_by_str(start_date)}{delimiter}{get_validated_date_by_str(end_date)}"
 
 
 def get_or_create_date_period_directory(
         start_date: str,
         end_date: str,
+        delimiter: str,
         base_path: Union[Path, str],
 ) -> Path:
     """
@@ -123,6 +130,7 @@ def get_or_create_date_period_directory(
 
     :param start_date: 시작 날짜 str
     :param end_date: 종료 날짜 str
+    :param delimiter: 시작/종료 날짜 사이의 구분자 str
     :param base_path: 기준 경로 (탐색 대상 최종 디렉토리 기준 부모 디렉토리) Union[Path, str]
     :return: 존재하는 혹은 새로 생성된 '기준 경로 + 기간별 포맷명' 의 디렉토리 경로 Path
     """
@@ -130,6 +138,7 @@ def get_or_create_date_period_directory(
     period_directory_name = get_period_directory_name(
         start_date=start_date,
         end_date=end_date,
+        delimiter=delimiter,
     )
 
     return get_or_create_directory(base_path=Path(base_path), directory_name=period_directory_name)

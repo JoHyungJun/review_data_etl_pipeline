@@ -15,11 +15,29 @@ from typing import Type, Callable
 
 from core.base.pipeline.base_process_pipeline import BaseProcessPipeline
 from core.config.model.config_registry import ConfigRegistry
+from domain.platform.ably.pipeline.pipeline import AblyToVReviewProcessPipeline
+from domain.platform.coupang.pipeline.pipeline import CoupangToVReviewProcessPipeline
+from factory.pipeline.spec.deploy import (
+    build_deploy_ably_to_vreview_process_pipeline_spec,
+    build_deploy_coupang_to_vreview_process_pipeline_spec,
+)
 
 
 DEPLOY_PIPELINE_FACTORY_MAPPING: dict[
     Type[BaseProcessPipeline],
     Callable[[ConfigRegistry], BaseProcessPipeline]
 ] = {
-    # TODO: deploy 용 pipeline spec 정의 및 해당 매핑 정보 작성
+    AblyToVReviewProcessPipeline: lambda config_registry:
+        AblyToVReviewProcessPipeline(
+            build_deploy_ably_to_vreview_process_pipeline_spec(
+                config_registry=config_registry
+            )
+        ),
+
+    CoupangToVReviewProcessPipeline: lambda config_registry:
+        CoupangToVReviewProcessPipeline(
+            build_deploy_coupang_to_vreview_process_pipeline_spec(
+                config_registry=config_registry
+            )
+        ),
 }

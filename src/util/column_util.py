@@ -152,7 +152,7 @@ def drop_safely(
 
     :param df: 대상 pandas.DataFrame
     :param column_names: 삭제할 컬럼 목록 list[str]
-    :param inplace: 기존 df 에 해당 메서드 로직 이후의 결과를 덮어 쓸지 여부 bool
+    :param inplace: 기존 df 에 해당 메서드 로직 이후의 결과를 덮어쓸지 여부 bool
     :return: 지정 컬럼 삭제 후의 데이터 pandas.DataFrame
     """
 
@@ -185,7 +185,7 @@ def drop_invalid_columns_data_safely(
 
     :param df: 대상 pandas.DataFrame
     :param column_names: 지정할 대상 컬럼 목록 list[str]
-    :param inplace: 기존 df 에 해당 메서드 로직 이후의 결과를 덮어 쓸지 여부 bool
+    :param inplace: 기존 df 에 해당 메서드 로직 이후의 결과를 덮어쓸지 여부 bool
     :return: 지정 컬럼 전처리 후의 데이터 pandas.DataFrame
     """
 

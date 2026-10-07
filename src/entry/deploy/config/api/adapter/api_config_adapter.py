@@ -87,7 +87,7 @@ class ApiConfigAdapter(BaseSectionBasedConfigAdapter):
         common_config = request.common_config
         configs = request.configs
 
-        for field_name in type(request).model_fields:
+        for field_name in type(request).model_fields.keys():
             field_value = getattr(request, field_name)
 
             # common config / configs 를 제외한 변수 순회
