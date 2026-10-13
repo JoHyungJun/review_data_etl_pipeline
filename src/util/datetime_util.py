@@ -14,7 +14,10 @@ from urllib.parse import quote
 
 import pandas as pd
 
-from src.util.validate_util import get_validated_date_by_str, get_validated_time_by_str
+from util.validate_util import (
+    get_validated_date_by_str,
+    get_validated_time_by_str,
+)
 
 
 """

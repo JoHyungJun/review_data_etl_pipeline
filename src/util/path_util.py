@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Union, Optional, Any
 
 from config.constant.common.name_constants import *
-from src.util.datetime_util import get_validated_date_by_str
+from util.validate_util import get_validated_date_by_str
 
 
 def get_root_directory() -> Path:
