@@ -13,39 +13,8 @@ import shutil
 from pathlib import Path
 from typing import Union, Optional, Any
 
-from config.constant.common.name_constants import *
+from config.constant.common.path_constants import get_base_directory
 from util.validate_util import get_validated_date_by_str
-
-
-def get_root_directory() -> Path:
-    """
-    프로젝트 루트 디렉토리 (최상위 기준 경로 디렉토리) 경로 탐색 및 반환
-
-    루트 디렉토리를 기준으로 하위 주요 디렉토리 및 파일 경로를 정의하기 위해 활용
-
-    해당 메서드가 실행되는 파일 기준, 상위 디렉토리를 역순 탐색하여
-    루트 디렉토리 하위에 존재하는, 해당 프로젝트 필수 디렉토리 (src, datas, sentiment_model, logs) 가
-    모두 존재하는 디렉토리를 루트 디렉토리로 판단하고 반환
-
-    :return: 프로젝트 루트 디렉토리 경로
-    """
-
-    current = Path(__file__).resolve()
-
-    # 역순 탐색 및 현재 디렉토리에 필수 디렉토리가 모두 존재할 때 반환
-    for parent in current.parents:
-        if all(
-                (parent / folder).exists()
-                for folder in [
-                    SRC_DIRECTORY_NAME,
-                    DATAS_DIRECTORY_NAME,
-                    SENTIMENT_MODEL_DIRECTORY_NAME,
-                    LOGS_DIRECTORY_NAME,
-                ]
-        ):
-            return parent
-
-    raise RuntimeError("최상위 폴더를 찾을 수 없습니다. 프로젝트 구조를 다시 확인해주세요.")
 
 
 def get_or_create_directory(
@@ -201,7 +170,7 @@ def get_relative_path(target: Any) -> str:
     full_path = Path(inspect.getfile(target))
 
     # 프로젝트 root 경로
-    project_root_path = get_root_directory()
+    project_root_path = get_base_directory()
 
     # 프로젝트 root 경로로부터 상대 경로 추출
     try:
