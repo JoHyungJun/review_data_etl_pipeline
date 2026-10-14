@@ -12,59 +12,31 @@ deploy_application.py
 """
 
 
-from pathlib import Path
-
 import uvicorn
 
-from config.constant.common.name_constants import (
-    SRC_DIRECTORY_NAME,
-)
-from config.constant.common.path_constants import BASE_DIRECTORY_PATH, CONFIG_SCHEMA_YML_PATH, SCHEMA_CONSTANTS_PY_PATH
+from config.constant.common.name_constants import SRC_DIRECTORY_NAME
+from config.constant.common.path_constants import BASE_DIRECTORY_PATH
 from core.common.bootstrap import run_bootstrap
-from core.common.bootstrap.model.bootstrap_config import BootstrapConfig
 from entry.deploy.config.api.application import application
+from factory.bootstrap.config.local import LOCAL_BOOTSTRAP_CONFIG
 from util.runtime_environment_util import resolve_value_from_environment_variables
+from util.s3_util import download_from_s3_to_directory
 
 
 class DeployApplication:
 
-    SENTIMENT_MODEL_PATH_ENVIRONMENT_KEY = "SENTIMENT_MODEL_PATH"
-
-    APPLICATION_LOG_PATH_ENVIRONMENT_KEY = "APPLICATION_LOG_PATH"
-    SENTIMENT_EVENT_LOG_PATH_ENVIRONMENT_KEY = "SENTIMENT_EVENT_LOG_PATH"
-    SENTIMENT_CONFIG_TUNER_STATISTICS_META_LOG_PATH_ENVIRONMENT_KEY = "SENTIMENT_CONFIG_TUNER_STATISTICS_META_LOG_PATH"
+    S3_SENTIMENT_MODEL_URI_ENVIRONMENT_KEY = "S3_SENTIMENT_MODEL_URI"
 
     def __init__(self):
         # bootstrap 을 위한 데이터 path 정보를 환경변수에서 추출
-        sentiment_model_path = resolve_value_from_environment_variables(
-            self.SENTIMENT_MODEL_PATH_ENVIRONMENT_KEY
-        )
-        application_log_path = resolve_value_from_environment_variables(
-            self.APPLICATION_LOG_PATH_ENVIRONMENT_KEY
-        )
-        sentiment_event_log_path = resolve_value_from_environment_variables(
-            self.SENTIMENT_EVENT_LOG_PATH_ENVIRONMENT_KEY
-        )
-        sentiment_config_tuner_statistics_meta_log_path = resolve_value_from_environment_variables(
-            self.SENTIMENT_CONFIG_TUNER_STATISTICS_META_LOG_PATH_ENVIRONMENT_KEY
+        self.s3_sentiment_model_uri = resolve_value_from_environment_variables(
+            self.S3_SENTIMENT_MODEL_URI_ENVIRONMENT_KEY
         )
 
-        # Path 로 파싱
-        sentiment_model_path = Path(sentiment_model_path)
-        application_log_path = Path(application_log_path)
-        sentiment_event_log_path = Path(sentiment_event_log_path)
-        sentiment_config_tuner_statistics_meta_log_path = Path(sentiment_config_tuner_statistics_meta_log_path)
-
-        self.bootstrap_config = BootstrapConfig(
-            schema_yaml_path=CONFIG_SCHEMA_YML_PATH,
-            schema_constants_py_path=SCHEMA_CONSTANTS_PY_PATH,
-
-            sentiment_model_path=sentiment_model_path,
-
-            application_log_path=application_log_path,
-            sentiment_event_log_path=sentiment_event_log_path,
-            sentiment_config_tuner_statistics_meta_log_path=sentiment_config_tuner_statistics_meta_log_path,
-        )
+        # 현재 배포 시 path 관련 규칙
+        #   - sentiment model 은 S3 에 있으며, 최초 bootstrap 시 S3 경로에서 컨테이너로 가져와야 함
+        #   - log 관련 파일 들은 컨테이너 내부에 저장되며, 저장 경로는 local 의 구조를 따름
+        self.bootstrap_config = LOCAL_BOOTSTRAP_CONFIG
 
     @staticmethod
     def _validate_environment() -> None:
@@ -115,6 +87,11 @@ class DeployApplication:
         self._validate_environment()
 
         # bootstrap
+        download_from_s3_to_directory(
+            s3_uri=self.s3_sentiment_model_uri,
+            target_directory_path=self.bootstrap_config.sentiment_model_path,
+        )
+
         run_bootstrap(self.bootstrap_config)
 
         # run
